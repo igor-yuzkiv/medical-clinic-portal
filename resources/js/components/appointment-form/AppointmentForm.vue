@@ -27,9 +27,9 @@ const props = defineProps({
         :model-value="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
     >
-        <template #field:patient_id>
-            asdsa
-        </template>
+<!--        <template #field:patient_id>
+               TODO: add patient search
+        </template>-->
         <div class="flex flex-col items-end" v-if="!hideSubmitButton">
             <Button @click="$emit('submit', modelValue)">{{ $t('save') }}</Button>
         </div>

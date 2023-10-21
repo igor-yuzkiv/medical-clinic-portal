@@ -16,7 +16,7 @@ export const apptFormSchema = {
         type    : FieldType.text,
         label   : "Пацієнта",
         required: true,
-        //hidden  : true,
+        hidden  : true, //TODO: remove this field, after search field will be implemented
     },
     patient_name : {
         type       : FieldType.text,
