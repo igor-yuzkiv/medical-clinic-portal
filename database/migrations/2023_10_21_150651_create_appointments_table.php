@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->unsignedBigInteger("doctor_id");
             $table->unsignedBigInteger("patient_id");
             $table->dateTime("date_time");
+            $table->string("service_name");
 
             $table->foreign("doctor_id")
                 ->references("id")

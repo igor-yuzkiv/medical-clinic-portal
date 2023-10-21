@@ -26,3 +26,8 @@ Route::prefix("auth")
         Route::post("logout", [\App\Http\Controllers\AuthController::class, "logout"]);
         Route::post("register", [\App\Http\Controllers\AuthController::class, "register"]);
     });
+
+
+Route::resource("appointments", \App\Http\Controllers\AppointmentController::class)
+    ->except(["create", "edit"])
+    ->middleware('auth:sanctum');

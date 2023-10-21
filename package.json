@@ -18,6 +18,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@vuepic/vue-datepicker": "^7.2.0",
+        "date-fns": "^2.30.0",
         "flowbite": "^1.8.1",
         "flowbite-vue": "^0.0.17",
         "lodash": "^4.17.21",
