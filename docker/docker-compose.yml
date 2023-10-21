@@ -1,0 +1,40 @@
+version: '3'
+services:
+    #Redis
+    clinic_portal_redis:
+        container_name: clinic_portal_redis
+        image: redis
+        ports:
+            - 6379:6379
+        networks:
+            - app-network
+
+    #MySQL Service
+    clinic_portal_mysql:
+        image: mysql:5.7.22
+        command: [ 'mysqld', '--ssl=0', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--default-time-zone=+02:00' ]
+        container_name: clinic_portal_mysql
+        restart: always
+        volumes:
+            - ./dbdata:/var/lib/mysql
+        ports:
+            - '3306:3306'
+        expose:
+            - '3306'
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_USER_HOST=${DB_USER_HOST}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+        networks:
+            - app-network
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge
+
+#Volumes
+volumes:
+    dbdata:
+        driver: local
