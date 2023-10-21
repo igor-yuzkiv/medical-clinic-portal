@@ -17,8 +17,11 @@ defineProps({
 </script>
 
 <template>
-    <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" v-if="items?.length">
+    <div class="relative w-full overflow-x-auto shadow-md sm:rounded-lg ">
+        <table
+            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+            v-if="items?.length"
+        >
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -78,6 +81,16 @@ defineProps({
             </tr>
             </tbody>
         </table>
+
+        <div
+            class="flex flex-col flex-grow items-center justify-center h-full text-gray-500"
+            v-else
+        >
+            <Icon icon="cil:sad" class="w-32 h-32"/>
+            <div class="mt-2 text-2xl">
+                {{$t('no_records_found')}}
+            </div>
+        </div>
     </div>
 </template>
 
