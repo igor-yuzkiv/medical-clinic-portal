@@ -18,9 +18,11 @@ return new class extends Migration {
             $table->string("phone")->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string("role")->nullable();
+            $table->integer("role")->nullable();
             $table->boolean("is_active")->default(true);
             $table->dateTime('last_activity_at')->nullable();
+            $table->string("source_id")->unique()->nullable();
+            $table->string("gender")->default(\App\Enums\GenderEnum::UNKNOWN->value);
             $table->rememberToken();
             $table->timestamps();
         });

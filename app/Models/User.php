@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\GenderEnum;
+use App\Enums\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -29,6 +31,8 @@ class User extends Authenticatable
         "role",
         "is_active",
         "last_activity_at",
+        "source_id",
+        "gender",
     ];
 
     /**
@@ -51,6 +55,8 @@ class User extends Authenticatable
         'last_activity_at'  => 'datetime',
         'is_active'         => 'bool',
         'password'          => 'hashed',
+        'role'              => UserRoleEnum::class,
+        'gender'            => GenderEnum::class,
     ];
 
     /**

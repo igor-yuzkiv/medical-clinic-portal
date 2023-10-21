@@ -24,4 +24,5 @@ Route::prefix("auth")
         Route::middleware('auth:sanctum')->get("user", [\App\Http\Controllers\AuthController::class, "getCurrentUser"]);
         Route::post("login", [\App\Http\Controllers\AuthController::class, "login"]);
         Route::post("logout", [\App\Http\Controllers\AuthController::class, "logout"]);
+        Route::post("register", [\App\Http\Controllers\AuthController::class, "register"]);
     });

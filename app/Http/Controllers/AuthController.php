@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterUserRequest;
+use App\Models\User;
 use App\Transformers\UserTransformer;
+use App\Utils\LoggerUtil;
+use App\Utils\ResponseUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Fractalistic\ArraySerializer;
@@ -72,5 +76,22 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function register(RegisterUserRequest $request)
+    {
+        try {
+            $data = $request->validated();
+            $data["password"] = \Hash::make($request->input('password'));
+            $user = User::create($data);
+            if ($user) {
+                return ResponseUtil::success('User created successfully');
+            } else {
+                return ResponseUtil::error('User not created');
+            }
+        } catch (\Exception $exception) {
+            LoggerUtil::exception($exception);
+            return ResponseUtil::exception($exception);
+        }
     }
 }
