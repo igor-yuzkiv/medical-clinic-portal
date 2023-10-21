@@ -31,3 +31,9 @@ Route::prefix("auth")
 Route::resource("appointments", \App\Http\Controllers\AppointmentController::class)
     ->except(["create", "edit"])
     ->middleware('auth:sanctum');
+
+Route::prefix("users")
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get("", [\App\Http\Controllers\UserController::class, "index"]);
+    });
