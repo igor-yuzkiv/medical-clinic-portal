@@ -18,6 +18,10 @@ use Illuminate\Http\JsonResponse;
 class AuthController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function getCurrentUser(Request $request)
     {
         return fractal($request->user())
@@ -78,7 +82,11 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    public function register(RegisterUserRequest $request)
+    /**
+     * @param RegisterUserRequest $request
+     * @return JsonResponse
+     */
+    public function register(RegisterUserRequest $request): JsonResponse
     {
         try {
             $data = $request->validated();
