@@ -34,7 +34,7 @@ export const apptFormSchema = {
         type       : FieldType.select,
         label      : "Послуга",
         required   : true,
-        placeholder: "Виберіть послугу",
+        placeholder: "Оберіть послугу",
         options    : Object.values(SERVICES_OPTIONS),
     },
     date_time    : {

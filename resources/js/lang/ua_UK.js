@@ -23,4 +23,5 @@ export default {
     save                       : "Зберегти",
     scheduled_appointments     : "Заплановані записи",
     no_records_found           : "Записів не знайдено",
+    pleas_select_one           : "Будь ласка, виберіть щось",
 }

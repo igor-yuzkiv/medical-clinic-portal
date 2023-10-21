@@ -2,6 +2,7 @@
 import XFormRenderer from "@/components/form-renderer/XFormRenderer.vue";
 import {apptFormSchema} from "@/forms/appointmentForm.js";
 import {Button} from "flowbite-vue";
+import {appointmentApi} from "@/api/appointmentApi.js";
 
 const emit = defineEmits([
     'update:modelValue',
@@ -19,6 +20,26 @@ const props = defineProps({
     },
 });
 
+async function handleSubmitted() {
+    //todo: validate form
+
+    const handleUpsert = async () => {
+        return props.modelValue?.id
+            ? appointmentApi.update(props.modelValue.id, props.modelValue)
+            : appointmentApi.create(props.modelValue)
+    }
+
+    //TODO: handle error
+    await handleUpsert()
+        .then(({data}) => {
+            if (data?.id) {
+                emit('submit', data);
+                return;
+            }
+
+        })
+        .catch(console.error)
+}
 </script>
 
 <template>
@@ -27,11 +48,11 @@ const props = defineProps({
         :model-value="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
     >
-<!--        <template #field:patient_id>
-               TODO: add patient search
-        </template>-->
+        <!--        <template #field:patient_id>
+                       TODO: add patient search
+                </template>-->
         <div class="flex flex-col items-end" v-if="!hideSubmitButton">
-            <Button @click="$emit('submit', modelValue)">{{ $t('save') }}</Button>
+            <Button @click="handleSubmitted">{{ $t('save') }}</Button>
         </div>
     </x-form-renderer>
 </template>

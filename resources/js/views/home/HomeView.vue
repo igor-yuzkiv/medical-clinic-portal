@@ -7,6 +7,7 @@ import UpcomingAppointments from "@/components/upcoming-appointments/UpcomingApp
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
 import {apptFromInitialValue} from "@/forms/appointmentForm.js";
 
+
 const toast = inject('toast');
 const appointments = ref([]);
 const upcomingAppointments = ref([]);
@@ -23,26 +24,9 @@ async function loadAppointments() {
     }
 }
 
-async function handleOnApptSubmitted() {
-    //todo: validate form
-
-    const handleUpsert = async () => {
-        return apptFormData.value?.id
-            ? appointmentApi.update(apptFormData.value.id, apptFormData.value)
-            : appointmentApi.create(apptFormData.value)
-    }
-
-    await handleUpsert()
-        .then(({data}) => {
-            if (data?.id) {
-                apptFormDialog.value = false;
-                loadAppointments();
-                return;
-            }
-            //todo: handle error
-        })
-        .catch(console.error)
-
+function handleOnApptSubmitted() {
+    apptFormDialog.value = false;
+    loadAppointments();
 }
 
 function handleOpenApptForm(appointment) {
@@ -98,14 +82,7 @@ onBeforeMount(() => {
                 <appointment-form
                     v-model="apptFormData"
                     @submit="handleOnApptSubmitted"
-                    hide-submit-button
                 />
-            </template>
-            <template #footer>
-                <div class="flex items-center justify-between">
-                    <Button outline @click="apptFormDialog = false">{{ $t('cancel') }}</Button>
-                    <Button @click="handleOnApptSubmitted">{{ $t('save') }}</Button>
-                </div>
             </template>
         </Modal>
     </teleport>

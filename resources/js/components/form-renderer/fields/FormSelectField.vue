@@ -33,6 +33,7 @@ const options = computed(() => {
     })
 })
 const readonly = computed(() => Boolean(props.settings?.readonly))
+const placeholder = computed(() => props.settings?.placeholder)
 
 
 function handleOnInput(e) {
@@ -49,6 +50,7 @@ function handleOnInput(e) {
             :options="options"
             :label="label"
             :readonly="readonly"
+            :placeholder="placeholder ?? $t('pleas_select_one')"
         />
     </div>
 </template>
