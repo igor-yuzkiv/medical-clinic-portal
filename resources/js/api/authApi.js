@@ -7,3 +7,8 @@ export function loginRequest(data) {
 export function logoutRequest() {
     return http.post('auth/logout')
 }
+
+
+export function fetchCurrentUser() {
+    return http.get(`auth/user`)
+}

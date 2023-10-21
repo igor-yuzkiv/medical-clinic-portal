@@ -2,8 +2,11 @@
 import {ref} from "vue";
 import {useOnClickOutside} from "@/hooks/useOnClickOutside.js";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
+import {ROUTES} from "@/constants/navigation.js";
 
 const store = useStore();
+const router = useRouter();
 
 const container = ref(null);
 const isOpen = ref(false);
@@ -14,7 +17,8 @@ const user = {
 };
 
 function handleLogout() {
-    //TODO: ...
+    store.dispatch("logout");
+    router.push({name: ROUTES.login.name});
 }
 
 useOnClickOutside(container, () => isOpen.value = false);

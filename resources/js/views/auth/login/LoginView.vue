@@ -2,7 +2,7 @@
 import {Icon} from "@iconify/vue";
 import {defineComponent} from "vue";
 import axios from "axios";
-import {loginRequest} from "@/api/authApi.js";
+import {fetchCurrentUser, loginRequest} from "@/api/authApi.js";
 import {SET_AUTH_TOKEN, SET_CURRENT_USER, SET_IS_LOADING} from "@/store/mutation-types.js";
 import {HOME_ROUTE_NAME} from "@/constants/navigation.js";
 
@@ -18,6 +18,17 @@ export default defineComponent({
                 login   : '',
                 password: '',
             }
+        }
+    },
+    async mounted() {
+        const user = await fetchCurrentUser()
+            .then((response) => response?.data ?? {})
+            .catch(() => {
+            })
+
+        if (user?.id) {
+            this.$store.commit(SET_CURRENT_USER, user)
+            this.$router.push({name: HOME_ROUTE_NAME})
         }
     },
     methods: {
@@ -43,6 +54,7 @@ export default defineComponent({
             }
             this.$store.commit(SET_CURRENT_USER, user)
             this.$store.commit(SET_AUTH_TOKEN, token)
+            localStorage.setItem('token', token)
             this.$router.push({name: HOME_ROUTE_NAME})
         }
     }

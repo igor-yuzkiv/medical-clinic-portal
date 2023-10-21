@@ -13,6 +13,15 @@ use Illuminate\Http\JsonResponse;
  */
 class AuthController extends Controller
 {
+
+    public function getCurrentUser(Request $request)
+    {
+        return fractal($request->user())
+            ->transformWith(new UserTransformer())
+            ->serializeWith(ArraySerializer::class)
+            ->respond();
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
