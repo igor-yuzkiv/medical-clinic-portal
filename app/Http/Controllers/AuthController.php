@@ -59,7 +59,10 @@ class AuthController extends Controller
             ->serializeWith(ArraySerializer::class)
             ->toArray();
 
-        $token = $user->createToken(name: 'auth_token', abilities: [$user->role || 'default'])->plainTextToken;
+        $token = $user->createToken(
+            name: 'auth_token',
+            abilities: $user->role ? [$user->role] : []
+        )->plainTextToken;
 
         return response()->json([
             'user'  => $userData,
@@ -91,6 +94,15 @@ class AuthController extends Controller
         try {
             $data = $request->validated();
             $data["password"] = \Hash::make($request->input('password'));
+
+            if (!$request->input('login')) {
+                $login = $request->input("phone");
+                if (!$login) {
+                    return ResponseUtil::error('Login or phone is required');
+                }
+                $data["login"] = $login;
+            }
+
             $user = User::create($data);
             if ($user) {
                 return ResponseUtil::success('User created successfully');
