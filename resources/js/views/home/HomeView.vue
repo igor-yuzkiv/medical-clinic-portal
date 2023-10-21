@@ -75,7 +75,7 @@ onBeforeMount(() => {
                 />
             </div>
             <div class="hidden md:flex flex-col w-1/4 bg-white rounded-xl shadow p-1 overflow-hidden">
-                <div class="mx-2 font-semibold text-lg text-gray-500">{{$t('scheduled_appointments')}}</div>
+                <div class="mx-2 font-semibold text-lg text-gray-500">{{ $t('scheduled_appointments') }}</div>
                 <div class="flex flex-col flex-grow overflow-y-auto mt-2 pl-2">
                     <UpcomingAppointments/>
                 </div>

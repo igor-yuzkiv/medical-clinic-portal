@@ -2,6 +2,9 @@
 
 import {SERVICES_OPTIONS} from "@/constants/domain.js";
 import EnumLabel from "@/components/enum-label/EnumLabel.vue";
+import {Button} from "flowbite-vue";
+import {Icon} from "@iconify/vue";
+import PatientLookup from "@/components/patient-lookup/PatientLookup.vue";
 
 defineEmits(['click:edit'])
 defineProps({
@@ -19,16 +22,16 @@ defineProps({
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
+                    {{ $t('service') }}
+                </th>
+                <th scope="col" class="px-6 py-3">
                     {{ $t("patient") }}
                 </th>
                 <th scope="col" class="px-6 py-3">
                     {{ $t("doctor") }}
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-6 py-3 hidden md:table-cell">
                     {{ $t("date") }}
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    {{ $t('service') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
 
@@ -41,26 +44,36 @@ defineProps({
                 v-for="item in items"
                 :key="item.id"
             >
-                <th scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ item.patient.name }}
-                </th>
-                <td class="px-6 py-4">
-                    {{ item.doctor.name }}
-                </td>
-                <td class="px-6 py-4">
-                    {{ item?.date }} {{ item?.time }}
-                </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 w-10">
                     <enum-label
                         :value="item.service_name"
                         :options="Object.values(SERVICES_OPTIONS)"
                     />
                 </td>
-                <td class="px-6 py-4" @click="$emit('click:edit', item)">
-                    <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">
-                        {{ $t('edit') }}
+                <th
+                    scope="row"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                    <patient-lookup clickable :value="item.patient"/>
+                    <div class="text-sm text-gray-500 block md:hidden">
+                        {{ item?.date }} {{ item?.time }}
                     </div>
+                </th>
+                <td class="px-6 py-4">
+                    {{ item.doctor.name }}
+                </td>
+                <td class="px-6 py-4 hidden md:table-cell">
+                    {{ item?.date }} {{ item?.time }}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <Button
+                        outline square
+                        @click="$emit('click:edit', item)"
+                        class="!rounded-full"
+                        :title="$t('edit')"
+                    >
+                        <Icon icon="mdi:pencil"/>
+                    </Button>
                 </td>
             </tr>
             </tbody>

@@ -22,7 +22,7 @@ const phone = computed(() => props.value?.phone)
 </script>
 
 <template>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col">
         <div :class="{'cursor-pointer text-blue-600 hover:underline': clickable}">
             {{name}}
         </div>
