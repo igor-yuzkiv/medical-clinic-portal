@@ -1,5 +1,13 @@
 <script setup>
-import {Timeline, TimelineContent, TimelineItem, TimelinePoint, TimelineTime, TimelineTitle} from "flowbite-vue";
+import {
+    Timeline,
+    TimelineBody,
+    TimelineContent,
+    TimelineItem,
+    TimelinePoint,
+    TimelineTime,
+    TimelineTitle
+} from "flowbite-vue";
 import {onMounted, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 import PatientLookup from "@/components/patient-lookup/PatientLookup.vue";
@@ -8,11 +16,26 @@ import {SERVICES_OPTIONS} from "@/constants/domain.js";
 
 const items = ref();
 
+async function loadItems() {
+    const response = await appointmentApi.fetchUpcoming()
+        .then(({data}) => data)
+        .catch(error => {
+            console.error(error);
+        });
+
+    if (response?.data && Array.isArray(response.data)) {
+        items.value = response.data;
+    }
+}
+
+
+onMounted(() => {
+    loadItems();
+})
 </script>
 
 <template>
     <Timeline>
-
         <timeline-item
             class="mb-2"
             v-for="item in items"
@@ -22,14 +45,13 @@ const items = ref();
             <timeline-content>
                 <timeline-time>
                     {{ item.time }}
+                    <enum-label :options="Object.values(SERVICES_OPTIONS)" :value="item?.service_name"/>
                 </timeline-time>
                 <timeline-title class="flex gap-x-1">
-                    <enum-label :options="Object.values(SERVICES_OPTIONS)" :value="item?.service_name"/>
-                    <patient-lookup :value="item?.patient" clickable/>
+                    <patient-lookup :value="item?.patient" clickable show-phone/>
                 </timeline-title>
             </timeline-content>
         </timeline-item>
-
     </Timeline>
 </template>
 

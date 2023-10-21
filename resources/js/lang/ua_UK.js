@@ -21,4 +21,5 @@ export default {
     cancel: "Скасувати",
     select: "Вибрати",
     save: "Зберегти",
+    scheduled_appointments: "Заплановані записи",
 }

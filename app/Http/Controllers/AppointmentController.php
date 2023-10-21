@@ -24,7 +24,8 @@ class AppointmentController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $appointments = Appointment::query();
+        $appointments = Appointment::query()
+            ->orderBy("date_time", "asc");
 
         if ($request->input("filters")) {
             $appointments->filter($request->input("filters"));

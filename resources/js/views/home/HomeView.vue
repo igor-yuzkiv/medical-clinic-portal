@@ -8,10 +8,8 @@ import AppointmentsTable from "@/components/appointments-table/AppointmentsTable
 import {apptFromInitialValue} from "@/forms/appointmentForm.js";
 
 const toast = inject('toast');
-
 const appointments = ref([]);
 const upcomingAppointments = ref([]);
-
 const apptFormDialog = ref(false);
 const apptFormData = ref(apptFromInitialValue());
 
@@ -76,8 +74,11 @@ onBeforeMount(() => {
                     @click:edit="handleOpenApptForm"
                 />
             </div>
-            <div class="hidden md:flex w-1/4 bg-white rounded-xl shadow p-3 overflow-auto">
-                <UpcomingAppointments/>
+            <div class="hidden md:flex flex-col w-1/4 bg-white rounded-xl shadow p-1 overflow-hidden">
+                <div class="mx-2 font-semibold text-lg text-gray-500">{{$t('scheduled_appointments')}}</div>
+                <div class="flex flex-col flex-grow overflow-y-auto mt-2 pl-2">
+                    <UpcomingAppointments/>
+                </div>
             </div>
         </div>
     </div>
