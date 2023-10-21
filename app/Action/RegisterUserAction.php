@@ -4,8 +4,6 @@ namespace App\Action;
 
 use App\Abstractions\Action\ActionInterface;
 use App\DTO\UserDto;
-use App\Enums\UserRoleEnum;
-use App\Models\Patient;
 use App\Models\User;
 
 /**
@@ -28,24 +26,23 @@ class RegisterUserAction implements ActionInterface
      */
     public function handle(): User
     {
-        $user = User::create($this->userDto->toArray());
-        if ($user->role === UserRoleEnum::PATIENT) {
-            $this->updateRelatedPatient($user);
+        $user = User::query()
+            ->where('phone', $this->userDto->phone)
+            ->first();
+
+        if (!$user) {
+            return User::create($this->userDto->toArray());
         }
+
+        if ($user->is_active) {
+            throw new \RuntimeException('User already exists');
+        }
+
+        $data = $this->userDto->toArray();
+        $data["password"] = \Hash::make($this->userDto->password);
+        $data['is_active'] = true;
+
+        $user->update($data);
         return $user;
     }
-
-    /**
-     * @param User $user
-     * @return void
-     */
-    private function updateRelatedPatient(User $user): void
-    {
-        $patient = Patient::where("phone", $this->userDto->phone)->first();
-        if ($patient) {
-            $patient->user_id = $user->id;
-            $patient->save();
-        }
-    }
-
 }

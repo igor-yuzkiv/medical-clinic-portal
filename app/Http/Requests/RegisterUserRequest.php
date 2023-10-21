@@ -18,13 +18,13 @@ class RegisterUserRequest extends FormRequest
     {
         return [
             'name'      => 'required|string|max:255',
-            'login'     => 'nullable|string|unique:users|max:255|required_without:phone',
-            'password'  => 'required|string|max:255',
+            'phone'     => 'required|string|max:255',
+            'login'     => 'nullable|string|unique:users|max:255',
             'email'     => 'nullable|email|unique:users|max:255',
-            'phone'     => 'nullable|string|unique:users|max:255|required_without:login',
+            'password'  => 'required|string|max:255',
             'role'      => 'required|nullable',
             'gender'    => 'nullable|string',
-            'source_id' => 'nullable|unique:users|string',
+            'source_id' => 'nullable|string',
         ];
     }
 

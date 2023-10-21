@@ -49,7 +49,6 @@ export default defineComponent({
 
             const {user, token} = response ?? {};
             if (!token || !user?.id) {
-                this.toast.error(this.$t('invalid_credentials'))
                 return;
             }
             this.$store.commit(SET_CURRENT_USER, user)

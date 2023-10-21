@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('appointment', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger("doctor_id");
             $table->unsignedBigInteger("patient_id");
-            $table->dateTime("date");
+            $table->dateTime("date_time");
 
             $table->foreign("doctor_id")
                 ->references("id")
@@ -21,7 +21,7 @@ return new class extends Migration {
 
             $table->foreign("patient_id")
                 ->references("id")
-                ->on("patients")
+                ->on("users")
                 ->onDelete("cascade");
 
             $table->softDeletes();

@@ -105,4 +105,10 @@ final class ResponseUtil
         ], self::STATUS_NO_CONTENT);
     }
 
+    public static function accessDenied(string $message = "Access denied"): JsonResponse {
+        return \Response::json([
+            'message' => $message
+        ], 403);
+    }
+
 }

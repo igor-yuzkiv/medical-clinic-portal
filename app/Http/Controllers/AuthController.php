@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Action\RegisterUserAction;
 use App\Http\Requests\RegisterUserRequest;
-use App\Models\User;
 use App\Transformers\UserTransformer;
 use App\Utils\LoggerUtil;
 use App\Utils\ResponseUtil;
@@ -25,7 +24,13 @@ class AuthController extends Controller
      */
     public function getCurrentUser(Request $request)
     {
-        return fractal($request->user())
+        $user = $request->user();
+
+        if (!$user->is_active) {
+            return ResponseUtil::accessDenied();
+        }
+
+        return fractal($user)
             ->transformWith(new UserTransformer())
             ->serializeWith(ArraySerializer::class)
             ->respond();
@@ -50,9 +55,7 @@ class AuthController extends Controller
 
         $user = Auth::user();
         if (!$user->is_active) {
-            return response()->json([
-                'message' => 'Access denied'
-            ], 403);
+            return ResponseUtil::accessDenied();
         }
 
         $userData = fractal($user)
