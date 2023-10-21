@@ -1,3 +1,5 @@
+export const HOME_ROUTE_NAME = "home";
+
 export const ROUTES = {
     login: {
         name: "login",

@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ *
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -19,8 +22,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'login',
         'email',
+        'phone',
         'password',
+        "role",
+        "is_active",
+        "last_activity_at",
     ];
 
     /**
@@ -40,6 +48,16 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'last_activity_at'  => 'datetime',
+        'is_active'         => 'bool',
+        'password'          => 'hashed',
     ];
+
+    /**
+     * @return string
+     */
+    public function getAuthIdentifierName(): string
+    {
+        return 'login';
+    }
 }

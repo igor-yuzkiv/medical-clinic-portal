@@ -10,7 +10,7 @@ import assetsPath from "@/constants/assetsPath.js";
         <header class="flex items-center justify-between px-2 w-full p-2 bg-white shadow-sm">
             <div class="flex items-center gap-x-3">
                 <img class="w-10" :src="assetsPath.logo" alt="full-logo"/>
-                <h1 class="font-semibold text-indigo-500 text-xl">{{appName}}</h1>
+                <h1 class="font-semibold text-indigo-600 text-xl">{{appName}}</h1>
             </div>
 
             <div>
