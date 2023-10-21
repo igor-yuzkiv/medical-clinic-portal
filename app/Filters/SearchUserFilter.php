@@ -9,7 +9,7 @@ class SearchUserFilter extends Filter
 {
     public function apply(Builder $query): Builder
     {
-        $keyword = $this->parameterBag->get("keyword");
+        $keyword = $this->parameterBag->get(0);
         if (!$keyword) {
             return $query;
         }

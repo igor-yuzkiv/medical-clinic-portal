@@ -1,6 +1,8 @@
 import {FieldType} from "@/components/form-renderer/index.js";
 import {SERVICES_OPTIONS} from "@/constants/domain.js";
 
+//TODO: form validation schema
+
 export const apptFromInitialValue = () => ({
     patient_id   : '',
     patient_name : '',
@@ -14,7 +16,7 @@ export const apptFormSchema = {
         type    : FieldType.text,
         label   : "Пацієнта",
         required: true,
-        hidden  : true,
+        //hidden  : true,
     },
     patient_name : {
         type       : FieldType.text,

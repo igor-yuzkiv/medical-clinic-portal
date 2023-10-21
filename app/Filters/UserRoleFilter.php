@@ -17,7 +17,7 @@ class UserRoleFilter extends Filter
      */
     public function apply(Builder $query): Builder
     {
-        $role = UserRoleEnum::tryFrom($this->parameterBag->get("role"));
+        $role = UserRoleEnum::tryFrom($this->parameterBag->get(0));
         if (!$role) {
             return $query;
         }

@@ -14,6 +14,6 @@ class IgorTestCommand extends Command
 
     public function handle(): void
     {
-        $user = User::query();
+
     }
 }
