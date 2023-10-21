@@ -25,7 +25,10 @@ class AppointmentController extends Controller
     public function index(Request $request): JsonResponse
     {
         $appointments = Appointment::query()
-            ->orderBy("date_time", "asc");
+            ->orderBy(
+                $request->input('orderBy', 'date_time'),
+                $request->input('order', 'desc')
+            );
 
         if ($request->input("filters")) {
             $appointments->filter($request->input("filters"));
@@ -33,7 +36,7 @@ class AppointmentController extends Controller
 
         if ($request->boolean('paginate', true)) {
             $appointments = $appointments->paginate($request->input('per_page', 10));
-        }else {
+        } else {
             $appointments = $appointments->get();
         }
 

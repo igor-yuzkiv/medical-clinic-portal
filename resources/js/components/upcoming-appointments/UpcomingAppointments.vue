@@ -13,6 +13,7 @@ import {appointmentApi} from "@/api/appointmentApi.js";
 import PatientLookup from "@/components/patient-lookup/PatientLookup.vue";
 import EnumLabel from "@/components/enum-label/EnumLabel.vue";
 import {SERVICES_OPTIONS} from "@/constants/domain.js";
+import moment from "moment";
 
 const items = ref();
 
@@ -24,10 +25,14 @@ async function loadItems() {
         });
 
     if (response?.data && Array.isArray(response.data)) {
-        items.value = response.data;
+        items.value = response.data.map(item => {
+            return {
+                ...item,
+                _isPassed: moment(item.date_time).isBefore(moment()),
+            }
+        });
     }
 }
-
 
 onMounted(() => {
     loadItems();
@@ -44,8 +49,14 @@ onMounted(() => {
             </timeline-point>
             <timeline-content>
                 <timeline-time>
-                    {{ item.time }}
-                    <enum-label :options="Object.values(SERVICES_OPTIONS)" :value="item?.service_name"/>
+                    <span :class="{'line-through':item._isPassed}">
+                        {{ item.time }}
+                    </span>
+                    <enum-label
+                        :class="{'line-through':item._isPassed}"
+                        :options="Object.values(SERVICES_OPTIONS)"
+                        :value="item?.service_name"
+                    />
                 </timeline-time>
                 <timeline-title class="flex gap-x-1">
                     <patient-lookup :value="item?.patient" clickable show-phone/>

@@ -41,10 +41,11 @@ export function ApiResource(uri) {
     return {
         uri: this.uri,
 
-        getList: (includes = [], filters = [], query = {}) => {
+        getList: (options = {includes: [], filters: [], query: {}}) => {
+            const query = options?.query || {};
             const queryString = getQueryStrings({
-                ...getIncludesQuery(includes),
-                ...getFiltersQuery(filters),
+                ...getIncludesQuery(options?.includes || []),
+                ...getFiltersQuery(options?.filters || []),
                 ...query,
             })
             return http.get(this.uri + '?' + queryString);

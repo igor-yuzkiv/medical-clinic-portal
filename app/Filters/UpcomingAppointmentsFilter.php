@@ -9,6 +9,7 @@ class UpcomingAppointmentsFilter extends Filter
 {
     public function apply(Builder $query): Builder
     {
-        return $query->whereDate("date_time", '>=', today())->limit('100');
+        return $query
+            ->whereDate("date_time", '>=', today());
     }
 }

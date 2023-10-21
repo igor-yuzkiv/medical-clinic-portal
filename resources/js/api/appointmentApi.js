@@ -9,7 +9,15 @@ appointmentApi.availableIncludes = {
 }
 
 appointmentApi.fetchUpcoming = function (includes = []) {
-    return appointmentApi.getList(includes, ['upcoming'], {paginate: false});
+    return appointmentApi.getList({
+        includes,
+        filters: ['upcoming'],
+        query  : {
+            paginate: false,
+            orderBy : 'date_time',
+            order   : "asc"
+        }
+    });
 }
 
 export {
