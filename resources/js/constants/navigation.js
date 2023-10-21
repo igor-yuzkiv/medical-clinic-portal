@@ -1,7 +1,7 @@
 export const ROUTES = {
     login: {
         name: "login",
-        path: "/login",
+        path: "login",
         component: () => import("@/views/auth/login/LoginView.vue")
     },
 
@@ -9,5 +9,5 @@ export const ROUTES = {
         name: "home",
         path: "",
         component: () => import("@/views/home/HomeView.vue")
-    }
+    },
 }
