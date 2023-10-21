@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Action\RegisterUserAction;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use App\Transformers\UserTransformer;
@@ -92,23 +93,11 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request): JsonResponse
     {
         try {
-            $data = $request->validated();
-            $data["password"] = \Hash::make($request->input('password'));
-
-            if (!$request->input('login')) {
-                $login = $request->input("phone");
-                if (!$login) {
-                    return ResponseUtil::error('Login or phone is required');
-                }
-                $data["login"] = $login;
-            }
-
-            $user = User::create($data);
-            if ($user) {
-                return ResponseUtil::success('User created successfully');
-            } else {
-                return ResponseUtil::error('User not created');
-            }
+            $user = (new RegisterUserAction($request->getUserDto()))->handle();
+            return fractal($user)
+                ->transformWith(new UserTransformer())
+                ->serializeWith(ArraySerializer::class)
+                ->respond();
         } catch (\Exception $exception) {
             LoggerUtil::exception($exception);
             return ResponseUtil::exception($exception);

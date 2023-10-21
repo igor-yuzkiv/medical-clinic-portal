@@ -13,12 +13,6 @@ class IgorTestCommand extends Command
 
     public function handle(): void
     {
-        $user = User::create([
-            'name'     => 'Ігор Юзьків',
-            'login'    => '380999999999',
-            'email'    => null,
-            'phone'    => '380999999999',
-            'password' => \Hash::make('12345')
-        ]);
+
     }
 }

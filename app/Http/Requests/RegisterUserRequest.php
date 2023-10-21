@@ -2,10 +2,18 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\UserDto;
+use App\Utils\ResponseUtil;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ *
+ */
 class RegisterUserRequest extends FormRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
@@ -20,8 +28,23 @@ class RegisterUserRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * @return UserDto
+     */
+    public function getUserDto(): UserDto
+    {
+        $data = $this->validated();
+        if (!$this->input('login')) {
+            $data["login"] = $this->input("phone");;
+        }
+        return UserDto::of($data);
     }
 }

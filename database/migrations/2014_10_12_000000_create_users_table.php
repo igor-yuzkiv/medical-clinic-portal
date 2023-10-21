@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->string("source_id")->unique()->nullable();
             $table->string("gender")->default(\App\Enums\GenderEnum::UNKNOWN->value);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
