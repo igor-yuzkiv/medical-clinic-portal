@@ -85,7 +85,6 @@ onMounted(async () => {
     await handleLoadItems().then(() => {
         if (props.modelValue) {
             const item = items.value.find(item => item[props.itemKey] === props.modelValue);
-            console.log("found", item);
             if (item) {
                 keywordQuery.value = item[props.itemLabel];
             }

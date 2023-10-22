@@ -16,6 +16,7 @@ const props = defineProps({
     }
 });
 
+const isLoaded = ref(false);
 const isNewPatient = ref(false);
 const formData = ref(apptForm.apptFromInitialValue())
 
@@ -65,13 +66,17 @@ function handleChangePatientId(id) {
     formData.value.patient_id = id;
 }
 
-onMounted(loadAppointment);
+onMounted(async () => {
+    await loadAppointment();
+    isLoaded.value = true;
+});
 </script>
 
 <template>
     <x-form-renderer
         :schema="apptForm.apptFormSchema"
         v-model="formData"
+        v-if="isLoaded"
     >
         <template #field:patient_id="{field}">
             <div class="flex flex-col w-full gap-y-1" v-if="isNewPatient">

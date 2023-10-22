@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /_tmp/
 /docker/dbdata
+/storage/debugbar/
