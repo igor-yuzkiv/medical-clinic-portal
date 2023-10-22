@@ -14,6 +14,10 @@ class IgorTestCommand extends Command
 
     public function handle(): void
     {
-
+        $user = User::query()
+            ->filter([
+                'search(keyword:Вася, includeId:1)',
+            ])
+            ->get();
     }
 }

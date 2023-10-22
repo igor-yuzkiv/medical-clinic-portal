@@ -1,6 +1,6 @@
 <script setup>
 import {Button, Modal} from "flowbite-vue";
-import {nextTick, onMounted, reactive, ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import UpcomingAppointments from "@/components/upcoming-appointments/UpcomingAppointments.vue";
@@ -11,7 +11,7 @@ import {SET_IS_LOADING} from "@/store/mutation-types.js";
 const store = useStore();
 
 const appointments = ref([]);
-const apptFormDialog = reactive({
+const apptFormDialog = ref({
     isOpen: false,
     id    : null,
 });
@@ -27,14 +27,18 @@ async function loadAppointments() {
 }
 
 function handleOnApptSubmitted() {
-    apptFormDialog.isOpen = false;
-    apptFormDialog.id = null;
+    apptFormDialog.value = {
+        id    : null,
+        isOpen: false,
+    };
     loadAppointments();
 }
 
 function handleOpenApptForm(appointment) {
-    apptFormDialog.isOpen = true;
-    apptFormDialog.id = appointment?.id;
+    apptFormDialog.value = {
+        id    : appointment?.id,
+        isOpen: true,
+    };
 }
 
 onMounted(async () => {

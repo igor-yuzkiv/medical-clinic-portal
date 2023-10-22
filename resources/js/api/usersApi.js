@@ -4,7 +4,7 @@ const usersApi = new ApiResource('/users');
 
 usersApi.search = function (keyword, role = null) {
     const filters = [
-        `search(${keyword})`
+        `search(keyword:${keyword})`,
     ]
 
     if (role) {
@@ -12,8 +12,8 @@ usersApi.search = function (keyword, role = null) {
     }
 
     return usersApi.getList({
-        filters : filters,
-        query: {
+        filters: filters,
+        query  : {
             paginate: false,
             limit   : 100,
         }

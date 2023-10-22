@@ -31,11 +31,6 @@ const formSchema = {
 };
 
 const formValue = ref({});
-
-function test() {
-    console.log('test', formValue.value);
-}
-
 </script>
 
 <template>
@@ -46,8 +41,6 @@ function test() {
         >
         </XFormRenderer>
     </div>
-
-    <Button @click="test"> test</Button>
 </template>
 
 <style scoped>

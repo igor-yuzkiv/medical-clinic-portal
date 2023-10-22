@@ -50,23 +50,20 @@ function handleHideList() {
 }
 
 async function handleLoadItems() {
-    isLoading.value = true;
     if (!props.itemsProvider) {
+        console.warn("itemsProvider must be a function");
         return;
     }
+    isLoading.value = true;
     const response = await props.itemsProvider(keywordQuery.value)
-        .catch((error) => {
-            console.error(error);
-        })
-        .finally(() => {
-            isLoading.value = false;
-        });
+        .catch(console.error)
+        .finally(() => isLoading.value = false);
 
-    if (Array.isArray(response)) {
-        items.value = response;
-    } else {
+    if (!Array.isArray(response)) {
         console.warn("itemsProvider must return an array");
+        return;
     }
+    items.value = response;
 }
 
 function onKeywordQueryChange() {
@@ -79,16 +76,21 @@ function onKeywordQueryChange() {
 }
 
 function handleSelectItem(item) {
+    keywordQuery.value = item[props.itemLabel];
     emit('update:modelValue', item[props.itemKey]);
     handleHideList();
 }
 
-onMounted(() => {
-    if (typeof props.itemsProvider !== 'function') {
-        console.warn("itemsProvider must be a function");
-        return;
-    }
-    handleLoadItems();
+onMounted(async () => {
+    await handleLoadItems().then(() => {
+        if (props.modelValue) {
+            const item = items.value.find(item => item[props.itemKey] === props.modelValue);
+            console.log("found", item);
+            if (item) {
+                keywordQuery.value = item[props.itemLabel];
+            }
+        }
+    })
 })
 
 useOnClickOutside(containerRef, handleHideList)
@@ -115,7 +117,6 @@ useOnClickOutside(containerRef, handleHideList)
         </div>
 
         <div class="flex w-full items-center mt-1 relative">
-            {{modelValue}}
             <Input
                 class="w-full"
                 @focus="handleOpenList"

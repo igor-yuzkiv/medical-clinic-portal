@@ -23,13 +23,13 @@ async function loadAppointment() {
     if (!props.appointmentId) {
         return;
     }
-    const response = await appointmentApi.getById(props.appointmentId)
+    const response = await appointmentApi
+        .getById(props.appointmentId)
         .then(({data}) => data)
         .catch(console.error)
     if (response?.id) {
         formData.value = response;
     }
-    console.log("load", formData.value)
 }
 
 async function handleSubmitted() {
@@ -58,10 +58,11 @@ async function handlePatientSearch(keyword = "") {
     return Array.isArray(response?.data) ? response.data : [];
 }
 
-function handleChangePatientId(e) {
-    console.log({
-        e, formData
-    })
+function handleChangePatientId(id) {
+    if (!id) {
+        return;
+    }
+    formData.value.patient_id = id;
 }
 
 onMounted(loadAppointment);

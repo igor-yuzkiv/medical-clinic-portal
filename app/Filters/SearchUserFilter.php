@@ -5,11 +5,18 @@ namespace App\Filters;
 use App\Abstractions\Filter\Filter;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ *
+ */
 class SearchUserFilter extends Filter
 {
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
     public function apply(Builder $query): Builder
     {
-        $keyword = $this->parameterBag->get(0);
+        $keyword = $this->parameterBag->get('keyword');
         if (!$keyword) {
             return $query;
         }
