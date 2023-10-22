@@ -14,6 +14,6 @@ class UserDto extends DataTransferObject
     public string $password;
     public ?string $email = null;
     public null|UserRoleEnum|int $role = null;
-    public null|string|GenderEnum $gender = null;
+    public null|string|GenderEnum $gender = GenderEnum::UNKNOWN;
     public ?string $source_id = null;
 }
