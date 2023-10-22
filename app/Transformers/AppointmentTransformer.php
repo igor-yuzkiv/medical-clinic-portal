@@ -33,7 +33,7 @@ class AppointmentTransformer extends TransformerAbstract
             'id'                   => (string)$appointment->id,
             'doctor_id'            => (string)$appointment->doctor_id,
             'patient_id'           => (string)$appointment->patient_id,
-            'date_time'            => $appointment->date_time,
+            'date_time'            => $appointment->date_time ? $appointment->date_time->format('Y-m-d H:i') : null,
             'time'                 => $appointment->date_time ? $appointment->date_time->format('H:i') : null,
             'date'                 => $appointment->date_time ? $appointment->date_time->format('Y-m-d') : null,
             'service_name'         => $appointment->service_name,

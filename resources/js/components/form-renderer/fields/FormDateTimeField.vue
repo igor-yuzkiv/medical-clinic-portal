@@ -54,4 +54,8 @@ const realModel = computed({
 .x__date-time-picker >>> .dp__input_wrap input {
     @apply rounded-lg py-2 bg-gray-50 border-gray-300 text-gray-700
 }
+
+.x__date-time-picker >>> .dp__action_select {
+    @apply bg-blue-500 text-white
+}
 </style>
