@@ -6,6 +6,7 @@ use App\Abstractions\Serializer\DataArraySerializer;
 use App\Action\CreateAppointmentProcedure;
 use App\Http\Requests\SaveAppointmentRequest;
 use App\Models\Appointment;
+use App\Models\Views\AppointmentPivotView;
 use App\Transformers\AppointmentTransformer;
 use App\Utils\LoggerUtil;
 use App\Utils\ResponseUtil;
@@ -24,7 +25,7 @@ class AppointmentController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $appointments = Appointment::query()
+        $appointments = AppointmentPivotView::query()
             ->orderBy(
                 $request->input('orderBy', 'date_time'),
                 $request->input('order', 'desc')

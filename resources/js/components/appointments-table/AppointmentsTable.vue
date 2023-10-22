@@ -4,7 +4,6 @@ import {SERVICES_OPTIONS} from "@/constants/domain.js";
 import EnumLabel from "@/components/enum-label/EnumLabel.vue";
 import {Button} from "flowbite-vue";
 import {Icon} from "@iconify/vue";
-import PatientLookup from "@/components/patient-lookup/PatientLookup.vue";
 
 defineEmits(['click:edit'])
 defineProps({
@@ -57,13 +56,13 @@ defineProps({
                     scope="row"
                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                    <patient-lookup clickable :value="item.patient"/>
+                    {{ item?.patient_name }}
                     <div class="text-sm text-gray-500 block md:hidden">
                         {{ item?.date }} {{ item?.time }}
                     </div>
                 </th>
                 <td class="px-6 py-4">
-                    {{ item.doctor.name }}
+                    {{ item?.doctor_name }}
                 </td>
                 <td class="px-6 py-4 hidden md:table-cell">
                     {{ item?.date }} {{ item?.time }}
@@ -88,7 +87,7 @@ defineProps({
         >
             <Icon icon="cil:sad" class="w-32 h-32"/>
             <div class="mt-2 text-2xl">
-                {{$t('no_records_found')}}
+                {{ $t('no_records_found') }}
             </div>
         </div>
     </div>

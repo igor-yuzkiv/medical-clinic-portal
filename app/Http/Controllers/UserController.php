@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $users = User::query()
             ->orderBy(
-                $request->input('orderBy', 'name'),
+                $request->input('orderBy', 'created_at'),
                 $request->input('order', 'desc')
             );
 
@@ -31,6 +31,9 @@ class UserController extends Controller
         if ($request->boolean('paginate', true)) {
             $users = $users->paginate($request->input('per_page', 10));
         } else {
+            if ($request->input("limit")) {
+                $users->limit($request->input("limit"));
+            }
             $users = $users->get();
         }
 

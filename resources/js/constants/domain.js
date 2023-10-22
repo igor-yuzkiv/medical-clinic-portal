@@ -14,3 +14,13 @@ export const SERVICES_OPTIONS = {
         value: "x_ray"
     }
 }
+
+export const DOCTOR_ROLE = {
+    name : 'Лікар',
+    value: 1,
+};
+
+export const PATIENT_ROLE = {
+    name : 'Пацієнт',
+    value: 2,
+}

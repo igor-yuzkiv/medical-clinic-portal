@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Appointment;
+use App\Models\Views\AppointmentPivotView;
 use App\Utils\TransformersUtil;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
@@ -15,7 +16,7 @@ class AppointmentTransformer extends TransformerAbstract
     /**
      * @var array
      */
-    protected array $defaultIncludes = ['doctor', 'patient'];
+    protected array $defaultIncludes = [];
 
     /**
      * @var array|string[]
@@ -23,12 +24,12 @@ class AppointmentTransformer extends TransformerAbstract
     protected array $availableIncludes = ['doctor', 'patient'];
 
     /**
-     * @param Appointment $appointment
+     * @param Appointment|AppointmentPivotView $appointment
      * @return array
      */
-    public function transform(Appointment $appointment): array
+    public function transform(Appointment|AppointmentPivotView $appointment): array
     {
-        return [
+        $result = [
             'id'                   => (string)$appointment->id,
             'doctor_id'            => (string)$appointment->doctor_id,
             'patient_id'           => (string)$appointment->patient_id,
@@ -42,6 +43,14 @@ class AppointmentTransformer extends TransformerAbstract
             'updated_at'           => $appointment->updated_at,
             'updated_at_formatted' => TransformersUtil::dateTimeFormatted($appointment->updated_at),
         ];
+
+        if ($appointment instanceof AppointmentPivotView) {
+            $result['doctor_name'] = $appointment->doctor_name;
+            $result['patient_name'] = $appointment->patient_name;
+            $result['patient_phone'] = $appointment->patient_phone;
+        }
+
+        return $result;
     }
 
     /**

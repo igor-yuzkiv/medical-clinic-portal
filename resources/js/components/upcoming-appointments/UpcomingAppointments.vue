@@ -1,7 +1,6 @@
 <script setup>
 import {
     Timeline,
-    TimelineBody,
     TimelineContent,
     TimelineItem,
     TimelinePoint,
@@ -10,7 +9,6 @@ import {
 } from "flowbite-vue";
 import {onMounted, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
-import PatientLookup from "@/components/patient-lookup/PatientLookup.vue";
 import EnumLabel from "@/components/enum-label/EnumLabel.vue";
 import {SERVICES_OPTIONS} from "@/constants/domain.js";
 import moment from "moment";
@@ -18,7 +16,8 @@ import moment from "moment";
 const items = ref();
 
 async function loadItems() {
-    const response = await appointmentApi.fetchUpcoming()
+    const response = await appointmentApi
+        .fetchUpcoming()
         .then(({data}) => data)
         .catch(error => {
             console.error(error);
@@ -34,9 +33,7 @@ async function loadItems() {
     }
 }
 
-onMounted(() => {
-    loadItems();
-})
+onMounted(loadItems)
 </script>
 
 <template>
@@ -44,6 +41,7 @@ onMounted(() => {
         <timeline-item
             class="mb-2"
             v-for="item in items"
+            :key="item.id"
         >
             <timeline-point>
             </timeline-point>
@@ -59,13 +57,18 @@ onMounted(() => {
                     />
                 </timeline-time>
                 <timeline-title class="flex gap-x-1">
-                    <patient-lookup :value="item?.patient" clickable show-phone/>
+                    <div class="flex flex-col">
+                        <div class="cursor-pointer text-blue-600 hover:underline">
+                            {{ item?.patient_name }}
+                        </div>
+                        <div v-if="item?.patient_phone" class="text-sm text-gray-500">
+                            {{ item.patient_phone }}
+                        </div>
+                    </div>
                 </timeline-title>
             </timeline-content>
         </timeline-item>
     </Timeline>
 </template>
-
 <style scoped>
-
 </style>

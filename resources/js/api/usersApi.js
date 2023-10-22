@@ -12,9 +12,10 @@ usersApi.search = function (keyword, role = null) {
     }
 
     return usersApi.getList({
+        filters : filters,
         query: {
             paginate: false,
-            filters : filters,
+            limit   : 100,
         }
     })
 }

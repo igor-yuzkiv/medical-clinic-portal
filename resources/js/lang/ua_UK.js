@@ -24,4 +24,6 @@ export default {
     scheduled_appointments     : "Заплановані записи",
     no_records_found           : "Записів не знайдено",
     pleas_select_one           : "Будь ласка, виберіть щось",
+    patient_name               : "Ім'я пацієнта",
+    patient_phone              : "Телефон пацієнта",
 }

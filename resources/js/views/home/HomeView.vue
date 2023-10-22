@@ -1,15 +1,20 @@
 <script setup>
 import {Button, Modal} from "flowbite-vue";
-import {onBeforeMount, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import UpcomingAppointments from "@/components/upcoming-appointments/UpcomingAppointments.vue";
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
-import {apptFromInitialValue} from "@/forms/appointmentForm.js";
+import {useStore} from "vuex";
+import {SET_IS_LOADING} from "@/store/mutation-types.js";
+
+const store = useStore();
 
 const appointments = ref([]);
-const apptFormDialog = ref(false);
-const apptFormData = ref(apptFromInitialValue());
+const apptFormDialog = reactive({
+    isOpen: false,
+    id    : null,
+});
 
 async function loadAppointments() {
     const response = await appointmentApi
@@ -22,23 +27,22 @@ async function loadAppointments() {
 }
 
 function handleOnApptSubmitted() {
-    apptFormDialog.value = false;
+    apptFormDialog.isOpen = false;
+    apptFormDialog.id = null;
     loadAppointments();
 }
 
 function handleOpenApptForm(appointment) {
-    if (!appointment?.id) {
-        apptFormDialog.value = true;
-        apptFormData.value = apptFromInitialValue();
-        return;
-    }
-
-    apptFormDialog.value = true;
-    apptFormData.value = appointment;
+    apptFormDialog.isOpen = true;
+    apptFormDialog.id = appointment?.id;
 }
 
-onBeforeMount(() => {
-    loadAppointments();
+onMounted(async () => {
+    store.commit(SET_IS_LOADING, true)
+    await loadAppointments();
+    nextTick(() => {
+        store.commit(SET_IS_LOADING, false)
+    })
 })
 </script>
 
@@ -64,8 +68,9 @@ onBeforeMount(() => {
         </div>
     </div>
 
+    <!--Modals-->
     <teleport to="#x__modals">
-        <Modal v-if="apptFormDialog" @close="apptFormDialog = false">
+        <Modal v-if="apptFormDialog.isOpen" @close="apptFormDialog.isOpen = false">
             <template #header>
                 <div class="flex items-center text-lg">
                     {{ $t('appointment') }}
@@ -73,7 +78,7 @@ onBeforeMount(() => {
             </template>
             <template #body>
                 <appointment-form
-                    v-model="apptFormData"
+                    :appointment-id="apptFormDialog.id"
                     @submit="handleOnApptSubmitted"
                 />
             </template>

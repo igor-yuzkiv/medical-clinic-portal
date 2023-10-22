@@ -1,32 +1,44 @@
 <script setup>
 import XFormRenderer from "@/components/form-renderer/XFormRenderer.vue";
-import {apptFormSchema} from "@/forms/appointmentForm.js";
-import {Button} from "flowbite-vue";
+import * as apptForm from "@/forms/appointmentForm.js";
+import {Button, Input} from "flowbite-vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
+import AutocompleteField from "@/components/autocomplete-field/AutocompleteField.vue";
+import {usersApi} from "@/api/usersApi.js";
+import {PATIENT_ROLE} from "@/constants/domain.js";
+import {onMounted, ref} from "vue";
 
-const emit = defineEmits([
-    'update:modelValue',
-    'submit'
-])
-
+const emit = defineEmits(['submit'])
 const props = defineProps({
-    modelValue      : {
-        type   : Object,
-        default: () => ({}),
-    },
-    hideSubmitButton: {
-        type   : Boolean,
-        default: false,
-    },
+    appointmentId: {
+        type   : String,
+        default: null,
+    }
 });
+
+const isNewPatient = ref(false);
+const formData = ref(apptForm.apptFromInitialValue())
+
+async function loadAppointment() {
+    if (!props.appointmentId) {
+        return;
+    }
+    const response = await appointmentApi.getById(props.appointmentId)
+        .then(({data}) => data)
+        .catch(console.error)
+    if (response?.id) {
+        formData.value = response;
+    }
+    console.log("load", formData.value)
+}
 
 async function handleSubmitted() {
     //todo: validate form
 
     const handleUpsert = async () => {
-        return props.modelValue?.id
-            ? appointmentApi.update(props.modelValue.id, props.modelValue)
-            : appointmentApi.create(props.modelValue)
+        return props.appointmentId
+            ? appointmentApi.update(props.appointmentId, formData.value)
+            : appointmentApi.create(formData.value)
     }
 
     //TODO: handle error
@@ -34,24 +46,57 @@ async function handleSubmitted() {
         .then(({data}) => {
             if (data?.id) {
                 emit('submit', data);
-                return;
             }
-
         })
         .catch(console.error)
 }
+
+async function handlePatientSearch(keyword = "") {
+    const response = await usersApi.search(keyword, PATIENT_ROLE.value)
+        .then(({data}) => data)
+        .catch(console.error)
+    return Array.isArray(response?.data) ? response.data : [];
+}
+
+function handleChangePatientId(e) {
+    console.log({
+        e, formData
+    })
+}
+
+onMounted(loadAppointment);
 </script>
 
 <template>
     <x-form-renderer
-        :schema="apptFormSchema"
-        :model-value="modelValue"
-        @update:modelValue="$emit('update:modelValue', $event)"
+        :schema="apptForm.apptFormSchema"
+        v-model="formData"
     >
-        <!--        <template #field:patient_id>
-                       TODO: add patient search
-                </template>-->
-        <div class="flex flex-col items-end" v-if="!hideSubmitButton">
+        <template #field:patient_id="{field}">
+            <div class="flex flex-col w-full gap-y-1" v-if="isNewPatient">
+                <Input
+                    v-model="formData.patient_name"
+                    :label="$t('patient_name')"
+                />
+                <Input
+                    v-model="formData.patient_phone"
+                    :label="$t('patient_phone')"
+                />
+            </div>
+            <div v-else>
+                <autocomplete-field
+                    :label="field?.label"
+                    item-key="id"
+                    item-label="name"
+                    :items-provider="handlePatientSearch"
+                    append-icon="icon-park:plus"
+                    :model-value="formData?.patient_id"
+                    @update:modelValue="handleChangePatientId"
+                    @click:append="isNewPatient = true"
+                />
+            </div>
+        </template>
+        <div class="flex flex-col items-end">
             <Button @click="handleSubmitted">{{ $t('save') }}</Button>
         </div>
     </x-form-renderer>
