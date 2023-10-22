@@ -46,7 +46,7 @@ defineProps({
                 v-for="item in items"
                 :key="item.id"
             >
-                <td class="px-6 py-4 w-10">
+                <td class="px-6 py-2 w-10">
                     <enum-label
                         :value="item.service_name"
                         :options="Object.values(SERVICES_OPTIONS)"
@@ -54,20 +54,20 @@ defineProps({
                 </td>
                 <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
                     {{ item?.patient_name }}
                     <div class="text-sm text-gray-500 block md:hidden">
                         {{ item?.date }} {{ item?.time }}
                     </div>
                 </th>
-                <td class="px-6 py-4">
+                <td class="px-6 py-2">
                     {{ item?.doctor_name }}
                 </td>
-                <td class="px-6 py-4 hidden md:table-cell">
+                <td class="px-6 py-2 hidden md:table-cell">
                     {{ item?.date }} {{ item?.time }}
                 </td>
-                <td class="px-6 py-4 text-right">
+                <td class="px-6 py-2 text-right">
                     <Button
                         outline square
                         @click="$emit('click:edit', item)"

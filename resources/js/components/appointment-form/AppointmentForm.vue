@@ -95,7 +95,7 @@ onMounted(async () => {
                     item-key="id"
                     item-label="name"
                     :items-provider="handlePatientSearch"
-                    append-icon="icon-park:plus"
+                    :append-icon="!appointmentId ? 'icon-park:plus' : null"
                     :model-value="formData?.patient_id"
                     @update:modelValue="handleChangePatientId"
                     @click:append="isNewPatient = true"

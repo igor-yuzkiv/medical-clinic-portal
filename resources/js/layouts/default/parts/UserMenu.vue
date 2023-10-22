@@ -44,8 +44,7 @@ useOnClickOutside(container, () => isOpen.value = false);
             :class="{hidden: !isOpen}"
         >
             <div class="px-4 py-3">
-                <span class="block text-sm text-gray-100">{{ user.name }}</span>
-                <span class="block text-sm  text-gray-300 truncate">{{ user.email }}</span>
+                <span class="truncate block text-sm text-gray-100">{{ user.name }}</span>
             </div>
 
             <div class="divide-y divide-gray-600">

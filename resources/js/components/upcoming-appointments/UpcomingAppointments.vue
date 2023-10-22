@@ -47,14 +47,15 @@ onMounted(loadItems)
             </timeline-point>
             <timeline-content>
                 <timeline-time>
-                    <span :class="{'line-through':item._isPassed}">
-                        {{ item.time }}
-                    </span>
-                    <enum-label
-                        :class="{'line-through':item._isPassed}"
-                        :options="Object.values(SERVICES_OPTIONS)"
-                        :value="item?.service_name"
-                    />
+                    <div class="flex gap-x-1">
+                        <div :class="{'line-through':item._isPassed}">
+                            {{ item.time }}
+                        </div>
+                        <enum-label
+                            :options="Object.values(SERVICES_OPTIONS)"
+                            :value="item?.service_name"
+                        />
+                    </div>
                 </timeline-time>
                 <timeline-title class="flex gap-x-1">
                     <div class="flex flex-col">
