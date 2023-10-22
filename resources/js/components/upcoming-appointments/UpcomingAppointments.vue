@@ -33,6 +33,11 @@ async function loadItems() {
     }
 }
 
+//TODO: refactor
+defineExpose({
+    loadItems,
+});
+
 onMounted(loadItems)
 </script>
 
