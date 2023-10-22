@@ -1,16 +1,13 @@
 <script setup>
 import {Button, Modal} from "flowbite-vue";
-import {inject, onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import UpcomingAppointments from "@/components/upcoming-appointments/UpcomingAppointments.vue";
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
 import {apptFromInitialValue} from "@/forms/appointmentForm.js";
 
-
-const toast = inject('toast');
 const appointments = ref([]);
-const upcomingAppointments = ref([]);
 const apptFormDialog = ref(false);
 const apptFormData = ref(apptFromInitialValue());
 
@@ -61,18 +58,14 @@ onBeforeMount(() => {
             <div class="hidden md:flex flex-col w-1/4 bg-white rounded-xl shadow p-1 overflow-hidden">
                 <div class="mx-2 font-semibold text-lg text-gray-500">{{ $t('scheduled_appointments') }}</div>
                 <div class="flex flex-col flex-grow overflow-y-auto mt-2 pl-2">
-                    <UpcomingAppointments/>
+                    <upcoming-appointments/>
                 </div>
             </div>
         </div>
     </div>
 
     <teleport to="#x__modals">
-        <Modal
-            v-if="apptFormDialog"
-            @close="apptFormDialog = false"
-        >
-
+        <Modal v-if="apptFormDialog" @close="apptFormDialog = false">
             <template #header>
                 <div class="flex items-center text-lg">
                     {{ $t('appointment') }}

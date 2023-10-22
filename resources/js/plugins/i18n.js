@@ -11,4 +11,6 @@ export const i18n = createI18n({
     },
 })
 
-
+export default function (app) {
+    app.use(i18n);
+}

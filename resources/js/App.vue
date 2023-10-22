@@ -1,9 +1,18 @@
-<script setup>
+<script>
+import {defineComponent} from "vue";
 import XSpinner from "@/components/spinner/XSpinner.vue";
-import {useStore} from "vuex";
-import {computed} from "vue";
-const store = useStore();
-const isLoading = computed(() => store.state.isLoading);
+import {mapState} from "vuex";
+
+export default defineComponent({
+    components: {
+        XSpinner,
+    },
+    computed  : {
+        ...mapState({
+            isLoading: state => state.isLoading,
+        })
+    }
+})
 </script>
 
 <template>

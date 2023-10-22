@@ -16,7 +16,6 @@ async function logout(next) {
 
 export default async function (to, from, next) {
     const user = await getCurrentUser();
-    console.log(user);
     if (!user?.id) {
         await logout(next)
         return;

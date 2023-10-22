@@ -16,7 +16,7 @@ function getCsrfToken() {
     try {
         token = getCookie('XSRF-TOKEN');
     } catch (e) {
-        console.log(e)
+        //
     }
 
     if (!token) {
