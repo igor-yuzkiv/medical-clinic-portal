@@ -1,4 +1,4 @@
-import {ApiResource} from "@/api/composable/apiResource.js";
+import {ApiResource} from "@/api/api.js";
 
 const appointmentApi = new ApiResource('/appointments');
 

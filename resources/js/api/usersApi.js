@@ -1,4 +1,4 @@
-import {ApiResource} from "@/api/composable/apiResource.js";
+import {ApiResource} from "@/api/api.js";
 import http from "@/plugins/http.js";
 
 const usersApi = new ApiResource('/users');
