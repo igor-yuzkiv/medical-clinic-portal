@@ -6,7 +6,7 @@ export function useAppointments() {
     const pagination = ref({
         total       : 0,
         count       : 0,
-        per_page    : 2,
+        per_page    : 10,
         current_page: 1,
         total_pages : 1,
         links       : {}
@@ -35,31 +35,11 @@ export function useAppointments() {
         if (meta ?? meta?.pagination) {
             pagination.value = meta.pagination;
         }
-
-        console.log('loadAppointments', appointments.value, pagination.value)
-    }
-
-    async function nextPage() {
-        if (pagination.value.current_page >= pagination.value.total_pages) {
-            return;
-        }
-        pagination.value.current_page++;
-        await loadAppointments();
-    }
-
-    async function previousPage() {
-        if (pagination.value.current_page <= 1) {
-            return;
-        }
-        pagination.value.current_page--;
-        await loadAppointments();
     }
 
     return {
         appointments,
         pagination,
-        loadAppointments,
-        nextPage,
-        previousPage
+        loadAppointments
     };
 }

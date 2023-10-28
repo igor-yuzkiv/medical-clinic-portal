@@ -15,6 +15,7 @@ const store = useStore();
 const {
     appointments,
     loadAppointments,
+    pagination,
 } = useAppointments();
 
 const apptFormDialog = ref({
@@ -56,8 +57,12 @@ onMounted(async () => {
             <div class="flex flex-grow w-full overflow-hidden">
                 <appointments-table :items="appointments" @click:edit="handleOpenApptForm"/>
             </div>
-            <div class="flex flex-none justify-end w-full">
-                <x-pagination/>
+            <div class="flex flex-none justify-center w-full">
+                <x-pagination
+                    :current-page="pagination.current_page"
+                    :total-pages="pagination.total_pages"
+                    @page-changed="loadAppointments($event)"
+                />
             </div>
         </div>
     </div>
