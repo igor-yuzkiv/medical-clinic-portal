@@ -26,4 +26,5 @@ export default {
     pleas_select_one           : "Будь ласка, виберіть щось",
     patient_name               : "Ім'я пацієнта",
     patient_phone              : "Телефон пацієнта",
+    back                       : "Назад",
 }

@@ -1,7 +1,6 @@
 <script setup>
 import {Button, Modal} from "flowbite-vue";
 import {nextTick, onMounted, ref} from "vue";
-import {appointmentApi} from "@/api/appointmentApi.js";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
 import {useStore} from "vuex";
