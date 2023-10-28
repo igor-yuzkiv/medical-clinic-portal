@@ -1,7 +1,7 @@
 import {createStore} from "vuex";
 import * as types from "@/store/mutation-types";
-import {SET_AUTH_TOKEN, SET_CURRENT_USER, SET_IS_LOADING} from "@/store/mutation-types";
-import {logoutRequest} from "@/api/authApi.js";
+import {SET_AUTH_TOKEN, SET_CURRENT_USER} from "@/store/mutation-types";
+import {logoutRequest} from "@/api/usersApi.js";
 
 
 const store = createStore({

@@ -2,7 +2,7 @@
 import {Icon} from "@iconify/vue";
 import {defineComponent} from "vue";
 import axios from "axios";
-import {fetchCurrentUser, loginRequest} from "@/api/authApi.js";
+import {fetchCurrentUser, loginRequest} from "@/api/usersApi.js";
 import {SET_AUTH_TOKEN, SET_CURRENT_USER, SET_IS_LOADING} from "@/store/mutation-types.js";
 import {HOME_ROUTE_NAME} from "@/constants/navigation.js";
 

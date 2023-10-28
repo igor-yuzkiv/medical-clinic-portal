@@ -1,5 +1,5 @@
 import store from "@/store/index.js";
-import {fetchCurrentUser} from "@/api/authApi.js";
+import {fetchCurrentUser} from "@/api/usersApi.js";
 import {ROUTES} from "@/constants/navigation.js";
 import {SET_CURRENT_USER} from "@/store/mutation-types.js";
 
