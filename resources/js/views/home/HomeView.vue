@@ -3,13 +3,11 @@ import {Button, Modal} from "flowbite-vue";
 import {nextTick, onMounted, ref} from "vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
-import UpcomingAppointments from "@/components/upcoming-appointments/UpcomingAppointments.vue";
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
 import {useStore} from "vuex";
 import {SET_IS_LOADING} from "@/store/mutation-types.js";
 
 const store = useStore();
-const upcomingAppointmentsRef = ref(null);
 const appointments = ref([]);
 const apptFormDialog = ref({
     isOpen: false,
@@ -32,7 +30,6 @@ function handleOnApptSubmitted() {
         isOpen: false,
     };
     loadAppointments();
-    upcomingAppointmentsRef.value?.loadItems();
 }
 
 function handleOpenApptForm(appointment) {
@@ -57,19 +54,8 @@ onMounted(async () => {
             <Button @click="handleOpenApptForm">{{ $t("create_appointment") }}</Button>
         </div>
 
-        <div class="flex flex-grow mt-2 gap-x-3 overflow-hidden">
-            <div class="flex w-full bg-white rounded-xl shadow overflow-hidden">
-                <appointments-table
-                    :items="appointments"
-                    @click:edit="handleOpenApptForm"
-                />
-            </div>
-            <div class="hidden md:flex flex-col w-1/4 bg-white rounded-xl shadow p-1 overflow-hidden">
-                <div class="mx-2 font-semibold text-lg text-gray-500">{{ $t('scheduled_appointments') }}</div>
-                <div class="flex flex-col flex-grow overflow-y-auto mt-2 pl-2">
-                    <upcoming-appointments ref="upcomingAppointmentsRef"/>
-                </div>
-            </div>
+        <div class="flex flex-grow w-full bg-white rounded-xl shadow overflow-hidden">
+            <appointments-table :items="appointments" @click:edit="handleOpenApptForm"/>
         </div>
     </div>
 

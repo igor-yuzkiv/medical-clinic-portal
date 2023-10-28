@@ -13,9 +13,7 @@ import assetsPath from "@/constants/assetsPath.js";
                 <h1 class="font-semibold text-indigo-600 text-xl">{{appName}}</h1>
             </div>
 
-            <div>
-                <user-menu></user-menu>
-            </div>
+            <user-menu/>
         </header>
         <main class="flex flex-col flex-grow overflow-hidden">
             <router-view></router-view>

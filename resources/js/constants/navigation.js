@@ -6,7 +6,6 @@ export const ROUTES = {
         path: "login",
         component: () => import("@/views/auth/login/LoginView.vue")
     },
-
     home: {
         name: "home",
         path: "",
