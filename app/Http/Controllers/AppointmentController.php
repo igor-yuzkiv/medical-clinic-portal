@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Abstractions\Controller\ResourceController;
 use App\Abstractions\Serializer\DataArraySerializer;
 use App\Action\CreateAppointmentProcedure;
 use App\Http\Requests\SaveAppointmentRequest;
@@ -17,7 +18,7 @@ use League\Fractal\Serializer\ArraySerializer;
 /**
  *
  */
-class AppointmentController extends Controller
+class AppointmentController extends ResourceController
 {
     /**
      * @param Request $request

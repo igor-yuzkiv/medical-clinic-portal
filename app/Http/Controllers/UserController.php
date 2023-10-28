@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Abstractions\Controller\Controller;
 use App\Abstractions\Serializer\DataArraySerializer;
 use App\Models\User;
 use App\Transformers\UserTransformer;

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Abstractions\Controller\Controller;
 use App\Action\RegisterUserAction;
 use App\Http\Requests\RegisterUserRequest;
 use App\Transformers\UserTransformer;
 use App\Utils\LoggerUtil;
 use App\Utils\ResponseUtil;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Fractalistic\ArraySerializer;
-use Illuminate\Http\JsonResponse;
 
 /**
  *

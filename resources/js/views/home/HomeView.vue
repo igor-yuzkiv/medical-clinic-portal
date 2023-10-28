@@ -6,23 +6,21 @@ import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
 import {useStore} from "vuex";
 import {SET_IS_LOADING} from "@/store/mutation-types.js";
+import {useAppointments} from "@/hooks/useAppointments.js";
+import XPagination from "@/components/pagination/XPagination.vue";
+
 
 const store = useStore();
-const appointments = ref([]);
+
+const {
+    appointments,
+    loadAppointments,
+} = useAppointments();
+
 const apptFormDialog = ref({
     isOpen: false,
     id    : null,
 });
-
-async function loadAppointments() {
-    const response = await appointmentApi
-        .getList()
-        .then(({data}) => data)
-
-    if (Array.isArray(response?.data)) {
-        appointments.value = response.data;
-    }
-}
 
 function handleOnApptSubmitted() {
     apptFormDialog.value = {
@@ -54,8 +52,13 @@ onMounted(async () => {
             <Button @click="handleOpenApptForm">{{ $t("create_appointment") }}</Button>
         </div>
 
-        <div class="flex flex-grow w-full bg-white rounded-xl shadow overflow-hidden">
-            <appointments-table :items="appointments" @click:edit="handleOpenApptForm"/>
+        <div class="flex flex-col flex-grow overflow-hidden bg-white rounded-xl shadow p-1 mt-2">
+            <div class="flex flex-grow w-full overflow-hidden">
+                <appointments-table :items="appointments" @click:edit="handleOpenApptForm"/>
+            </div>
+            <div class="flex flex-none justify-end w-full">
+                <x-pagination/>
+            </div>
         </div>
     </div>
 

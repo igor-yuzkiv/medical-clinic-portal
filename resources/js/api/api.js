@@ -41,25 +41,31 @@ export function ApiResource(uri) {
     return {
         uri: this.uri,
 
-        getList: (options = {includes: [], filters: [], query: {}}) => {
+        getList: (options = {query: {}, includes: [], filters: []}) => {
             const query = options?.query || {};
+
             const queryString = getQueryStrings({
                 ...getIncludesQuery(options?.includes || []),
                 ...getFiltersQuery(options?.filters || []),
                 ...query,
             })
+
             return http.get(this.uri + '?' + queryString);
         },
+
         getById: (id, includes = []) => {
             const query = getQueryStrings(getIncludesQuery(includes));
             return http.get(`${this.uri}/${id}?${query}`);
         },
+
         create : (data) => {
             return http.post(this.uri, data);
         },
+
         update : (id, data) => {
             return http.put(`${this.uri}/${id}`, data);
         },
+
         delete : (id) => {
             return http.delete(`${this.uri}/${id}`);
         }
