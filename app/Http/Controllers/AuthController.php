@@ -97,6 +97,7 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request): JsonResponse
     {
         try {
+            LoggerUtil::variable($request->toArray());
             $user = (new RegisterUserAction($request->getUserDto()))->handle();
             return fractal($user)
                 ->transformWith(new UserTransformer())
