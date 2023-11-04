@@ -27,11 +27,16 @@ const {
 
 async function onClickSaveAppointment() {
     rootStore.toggleLoader(true);
-    if (formValue?.value.id) {
-        await updateAppointment(formValue.value.id);
-    } else {
-        await createAppointment();
+
+    const response = formValue.value?.id
+        ? await updateAppointment(formValue.value.id)
+        : await createAppointment()
+
+    if (!response) {
+        rootStore.toggleLoader(false);
+        return;
     }
+
     await loadAppointments(1);
     closeAppointmentFormModal();
     rootStore.toggleLoader(false);

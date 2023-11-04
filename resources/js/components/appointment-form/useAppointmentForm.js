@@ -52,6 +52,9 @@ export function useAppointmentForm() {
 
     async function createAppointment() {
         const data = await validateForm();
+        if (!data) {
+            return;
+        }
         return await appointmentApi
             .create(data)
             .then(({data}) => data)
@@ -62,6 +65,9 @@ export function useAppointmentForm() {
 
     async function updateAppointment(id) {
         const data = await validateForm();
+        if (!data) {
+            return;
+        }
         return await appointmentApi
             .update(id, data)
             .then(({data}) => data)
