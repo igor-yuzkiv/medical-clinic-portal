@@ -58,14 +58,14 @@ defineProps({
                 >
                     {{ item?.patient_name }}
                     <div class="text-sm text-gray-500 block md:hidden">
-                        {{ item?.date }} {{ item?.time }}
+                        {{ item?.date }}
                     </div>
                 </th>
                 <td class="px-6 py-2">
                     {{ item?.doctor_name }}
                 </td>
                 <td class="px-6 py-2 hidden md:table-cell">
-                    {{ item?.date }} {{ item?.time }}
+                    {{ item?.date }}
                 </td>
                 <td class="px-6 py-2 text-right">
                     <Button

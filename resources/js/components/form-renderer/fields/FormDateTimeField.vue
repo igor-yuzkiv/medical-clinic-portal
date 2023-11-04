@@ -17,6 +17,10 @@ const props = defineProps({
         type   : Object,
         default: () => ({})
     },
+    enableTimePicker: {
+        type   : Boolean,
+        default: false
+    }
 })
 
 
@@ -46,6 +50,7 @@ const realModel = computed({
             :cancelText="$t('cancel')"
             :selectText="$t('select')"
             :format-locale="uk"
+            :enable-time-picker="enableTimePicker"
         />
     </div>
 </template>

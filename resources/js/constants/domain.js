@@ -1,4 +1,4 @@
-export const DATE_TIME_FORMAT = 'Y-MM-D HH:mm';
+export const DATE_TIME_FORMAT = 'Y-MM-D';
 
 export const SERVICES_OPTIONS = {
     kt   : {
