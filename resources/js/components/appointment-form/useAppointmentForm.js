@@ -70,26 +70,12 @@ export function useAppointmentForm() {
             })
     }
 
-    async function loadAppointment(id) {
-        /*const response = await appointmentApi
-            .getById(id)
-            .then(({data}) => data)
-            .catch(console.error)
-
-        console.log(response);*/
-    }
-
-    async function openAppointmentFormModal(id) {
-        if (id) {
-            await loadAppointment(id);
-        } else {
-            formValue.value = formInitialValue();
-        }
-
+    function openAppointmentFormModal() {
         formModalIsVisible.value = true;
     }
 
     function closeAppointmentFormModal() {
+        formValue.value = formInitialValue();
         formModalIsVisible.value = false;
     }
 

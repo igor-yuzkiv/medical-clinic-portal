@@ -6,7 +6,6 @@ use App\Abstractions\Filter\HasFilter;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Enums\GenderEnum;
 use App\Containers\User\Enums\UserRoleEnum;
-use App\Containers\User\Filters\SearchUserFilter;
 use App\Containers\User\Filters\UserRoleFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -69,7 +68,6 @@ class User extends Authenticatable
      */
     protected array $filters = [
         'role'   => UserRoleFilter::class,
-        'search' => SearchUserFilter::class,
     ];
 
     /**

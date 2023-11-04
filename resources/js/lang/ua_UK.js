@@ -9,6 +9,7 @@ export default {
     invalid_credentials        : "Невірний логін або пароль",
     appointment                : "Запис",
     create_appointment         : "Створити запис",
+    edit_appointment           : "Редагувати запис",
     appointments               : "Записи",
     patient                    : "Пацієнт",
     doctor                     : "Лікар",

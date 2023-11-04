@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Containers\User\Filters;
+namespace App\Containers\Patient\Filters;
 
 use App\Abstractions\Filter\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  *
  */
-class SearchUserFilter extends Filter
+class SearchPatientFilter extends Filter
 {
     /**
      * @param Builder $query

@@ -12,13 +12,14 @@ use App\Containers\User\Models\User;
 /**
  *
  */
-class CreateAppointmentAction implements ActionInterface
+class SaveAppointmentAction implements ActionInterface
 {
     /**
      * @param AppointmentDto $appointmentDto
      */
     public function __construct(
-        private readonly AppointmentDto $appointmentDto
+        private readonly AppointmentDto $appointmentDto,
+        private readonly ?Appointment $appointment = null
     )
     {
 
@@ -31,6 +32,11 @@ class CreateAppointmentAction implements ActionInterface
     {
         if ($this->appointmentDto->is_new_patient) {
             $this->appointmentDto->patient_id = $this->createNewPatient();
+        }
+
+        if ($this->appointment) {
+            $this->appointment->update($this->appointmentDto->toArray());
+            return $this->appointment;
         }
 
         return Appointment::create($this->appointmentDto->toArray());

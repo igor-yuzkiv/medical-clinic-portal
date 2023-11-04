@@ -6,6 +6,8 @@ import {uk} from 'date-fns/locale';
 import {computed} from "vue";
 import {DATE_TIME_FORMAT} from "@/constants/domain.js";
 import moment from "moment";
+import {usePatients} from "@/composable/usePatients.js";
+import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 
 const emit = defineEmits(["update:modelValue"])
 const props = defineProps({
@@ -15,15 +17,16 @@ const props = defineProps({
     },
 })
 
+const currentUserStore = useCurrentUserStore();
+const {filters, patients, loadPatents} = usePatients(true);
+
 const dateTime = computed({
     get() {
         return props.modelValue['date_time'] ?? '';
     },
     set(value) {
         value = moment(value).format(DATE_TIME_FORMAT);
-        const newModelValue = {...props.modelValue};
-        newModelValue['date_time'] = value;
-        emit('update:modelValue', newModelValue);
+        emit('update:modelValue', {...props.modelValue, date_time: value});
     }
 })
 
@@ -32,35 +35,43 @@ const isNewPatient = computed({
         return props.modelValue['is_new_patient'] ?? false;
     },
     set(value) {
-        const newModelValue = {...props.modelValue};
-        newModelValue['is_new_patient'] = value;
-        emit('update:modelValue', newModelValue);
+        emit('update:modelValue', {...props.modelValue, is_new_patient: value});
+    }
+})
+
+const patientId = computed({
+    get() {
+        return props.modelValue['patient_id'] ?? '';
+    },
+    set(value) {
+        emit('update:modelValue', {...props.modelValue, patient_id: value});
     }
 })
 
 function onFieldChange(field, e) {
-    const value = e.target.value;
-    const newModelValue = {...props.modelValue};
-    newModelValue[field] = value;
-    emit('update:modelValue', newModelValue);
+    emit('update:modelValue', {...props.modelValue, [field]: e.target.value});
 }
 
+async function handleSearchPatient(search) {
+    filters.value = [`doctor(${currentUserStore.getId})`, `search(keyword:${search})`];
+    await loadPatents();
+    return patients.value;
+}
 </script>
 
 <template>
     <div class="flex flex-col py-2 px-4">
-        <h1 class="ml-1 mb-2 text-lg font-semibold">
-            Створити новий запис
-        </h1>
-
         <autocomplete-field
             v-if="!modelValue['is_new_patient']"
-            required
             :label="$t('patient')"
+            v-model="patientId"
+            :items="patients"
+            item-key="id"
+            item-label="name"
+            :items-provider="handleSearchPatient"
             append-icon="icon-park:plus"
             @click:append="isNewPatient = true"
-            :model-value="modelValue['patient_id'] ?? ''"
-            @change="onFieldChange('patient_id', $event)"
+            required
         />
 
         <div v-if="modelValue['is_new_patient']">

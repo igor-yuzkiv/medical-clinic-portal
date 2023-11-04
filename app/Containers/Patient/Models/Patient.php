@@ -3,6 +3,8 @@
 namespace App\Containers\Patient\Models;
 
 use App\Abstractions\Filter\HasFilter;
+use App\Containers\Patient\Filters\DoctorPatientsFilter;
+use App\Containers\Patient\Filters\SearchPatientFilter;
 use App\Containers\User\Enums\GenderEnum;
 use App\Containers\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -42,9 +44,12 @@ class Patient extends Model
     ];
 
     /**
-     * @var array
+     * @var array|string[]
      */
-    protected array $filters = [];
+    protected array $filters = [
+        'doctor' => DoctorPatientsFilter::class,
+        'search' => SearchPatientFilter::class,
+    ];
 
     /**
      * @return HasOne

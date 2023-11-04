@@ -27,13 +27,25 @@ Route::prefix("auth")
         Route::post("register", [\App\Containers\User\Http\Controllers\AuthController::class, "register"]);
     });
 
-
-Route::resource("appointments", \App\Containers\Appointment\Http\Controllers\AppointmentController::class)
-    ->except(["create", "edit"])
-    ->middleware('auth:sanctum');
-
 Route::prefix("users")
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get("", [\App\Containers\User\Http\Controllers\UserController::class, "index"]);
+    });
+
+Route::prefix("patients")
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get("", [\App\Containers\Patient\Http\Controllers\PatientController::class, "index"]);
+    });
+
+
+Route::prefix("appointments")
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get("", [\App\Containers\Appointment\Http\Controllers\AppointmentController::class, "index"]);
+        Route::post("", [\App\Containers\Appointment\Http\Controllers\AppointmentController::class, "store"]);
+        Route::get("{appointment}", [\App\Containers\Appointment\Http\Controllers\AppointmentController::class, "show"])->where("appointment", "[0-9]+");
+        Route::put("{appointment}", [\App\Containers\Appointment\Http\Controllers\AppointmentController::class, "update"])->where("appointment", "[0-9]+");
+        Route::delete("{appointment}", [\App\Containers\Appointment\Http\Controllers\AppointmentController::class, "destroy"])->where("appointment", "[0-9]+");
     });

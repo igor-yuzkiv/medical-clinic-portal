@@ -11,6 +11,7 @@ import {useRootStore} from "@/store/useRootStore.js";
 import {useAppointmentForm} from "@/components/appointment-form/useAppointmentForm.js";
 import DisplayField from "@/components/display-field/DisplayField.vue";
 import XModal from "@/components/modal/XModal.vue";
+import {appointmentApi} from "@/api/appointmentApi.js";
 
 const rootStore = useRootStore();
 const {appointments, loadAppointments, pagination} = useAppointments();
@@ -18,6 +19,7 @@ const {appointments, loadAppointments, pagination} = useAppointments();
 const {
     formValue,
     createAppointment,
+    updateAppointment,
     formModalIsVisible,
     openAppointmentFormModal,
     closeAppointmentFormModal
@@ -25,8 +27,28 @@ const {
 
 async function onClickSaveAppointment() {
     rootStore.toggleLoader(true);
-    await createAppointment();
+    if (formValue?.value.id) {
+        await updateAppointment(formValue.value.id);
+    } else {
+        await createAppointment();
+    }
+    await loadAppointments(1);
+    closeAppointmentFormModal();
     rootStore.toggleLoader(false);
+}
+
+async function onClickAppointment(appointment) {
+    const response = await appointmentApi
+        .getById(appointment.id)
+        .then(({data}) => data)
+        .catch(console.error)
+
+    if (!response?.id) {
+        return
+    }
+
+    formValue.value = response;
+    openAppointmentFormModal();
 }
 
 onMounted(async () => {
@@ -59,7 +81,11 @@ onMounted(async () => {
 
         <div class="flex flex-col flex-grow relative overflow-auto mt-2">
             <ul class="space-y-2" v-if="appointments?.length">
-                <li v-for="item in appointments" :key="item.id">
+                <li
+                    v-for="item in appointments"
+                    :key="item.id"
+                    @click="onClickAppointment(item)"
+                >
                     <div class="flex relative w-full items-center bg-white rounded-xl shadow-sm p-2 cursor-pointer">
                         <div class="absolute top-1 right-0">
                             <div class="flex flex-col md:flex-row md:items-center">
@@ -118,6 +144,10 @@ onMounted(async () => {
             card-class="w-auto lg:w-3/6 xl:w-2/6 p-2 h-auto"
         >
             <div class="flex flex-col transition-all duration-250">
+                <h1 class="ml-5 my-2 text-lg font-semibold text-blue-950">
+                    {{ $t(formValue?.id ? 'edit_appointment' : 'create_appointment') }}
+                </h1>
+
                 <appointment-form v-model="formValue"/>
                 <div class="flex items-center justify-between mt-3 pt-2 border-t">
                     <Button outline @click="closeAppointmentFormModal">
