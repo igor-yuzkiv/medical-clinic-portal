@@ -74,9 +74,11 @@ class AppointmentController extends ResourceController
      * @param Appointment $appointment
      * @return JsonResponse
      */
-    public function show(Appointment $appointment): JsonResponse
+    public function show(Appointment $appointment, Request $request): JsonResponse
     {
+        $includes = explode(",", $request->get('includes', ""));
         return fractal($appointment)
+            ->parseIncludes($includes)
             ->serializeWith(ArraySerializer::class)
             ->transformWith(new AppointmentTransformer())
             ->respond();

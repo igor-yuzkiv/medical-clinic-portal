@@ -4,6 +4,7 @@ namespace App\Containers\Appointment\Transformers;
 
 use App\Containers\Appointment\Models\Appointment;
 use App\Containers\Appointment\Models\Views\AppointmentPivotView;
+use App\Containers\Patient\Transformers\PatientTransformer;
 use App\Containers\User\Transformers\UserTransformer;
 use App\Utils\TransformersUtil;
 use League\Fractal\Resource\Item;
@@ -70,6 +71,6 @@ class AppointmentTransformer extends TransformerAbstract
      */
     public function includePatient(Appointment $appointment): Item
     {
-        return $this->item($appointment->patient, new UserTransformer);
+        return $this->item($appointment->patient, new PatientTransformer());
     }
 }
