@@ -1,6 +1,6 @@
 <script setup>
-import {Badge, Button, Modal} from "flowbite-vue";
-import {onMounted, ref} from "vue";
+import {Badge, Button} from "flowbite-vue";
+import {onMounted} from "vue";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import {useAppointments} from "@/hooks/useAppointments.js";
 import XPagination from "@/components/pagination/XPagination.vue";
@@ -10,6 +10,7 @@ import EnumLabel from "@/components/enum-label/EnumLabel.vue";
 import {useRootStore} from "@/store/useRootStore.js";
 import {useAppointmentForm} from "@/components/appointment-form/useAppointmentForm.js";
 import DisplayField from "@/components/display-field/DisplayField.vue";
+import XModal from "@/components/modal/XModal.vue";
 
 const rootStore = useRootStore();
 const {appointments, loadAppointments, pagination} = useAppointments();
@@ -40,7 +41,7 @@ onMounted(async () => {
             />
 
             <div>
-                <Button class="shadow-sm">
+                <Button class="shadow-sm" @click="openAppointmentFormModal">
                     {{ $t('create_appointment') }}
                     <template #suffix>
                         <Icon class="text-xl" icon="icon-park-outline:plus"/>
@@ -94,16 +95,9 @@ onMounted(async () => {
 
     <!--Modals-->
     <teleport to="#x__modals">
-        <Modal v-if="formModalIsVisible" @close="closeAppointmentFormModal">
-            <template #header>
-                <div class="flex items-center text-lg">
-                    {{ $t('appointment') }}
-                </div>
-            </template>
-            <template #body>
-                <appointment-form/>
-            </template>
-        </Modal>
+        <x-modal v-model="formModalIsVisible" @close="closeAppointmentFormModal">
+            <appointment-form/>
+        </x-modal>
     </teleport>
 </template>
 
