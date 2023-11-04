@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->boolean("is_active")->default(true);
             $table->dateTime('last_activity_at')->nullable();
             $table->string("source_id")->unique()->nullable();
-            $table->string("gender")->default(\App\Enums\GenderEnum::UNKNOWN->value);
+            $table->string("gender")->default(\App\Containers\User\Enums\GenderEnum::UNKNOWN->value);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

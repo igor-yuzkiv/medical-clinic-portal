@@ -21,19 +21,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix("auth")
     ->group(function () {
-        Route::middleware('auth:sanctum')->get("user", [\App\Http\Controllers\AuthController::class, "getCurrentUser"]);
-        Route::post("login", [\App\Http\Controllers\AuthController::class, "login"]);
-        Route::post("logout", [\App\Http\Controllers\AuthController::class, "logout"]);
-        Route::post("register", [\App\Http\Controllers\AuthController::class, "register"]);
+        Route::middleware('auth:sanctum')->get("user", [\App\Containers\User\Http\Controllers\AuthController::class, "getCurrentUser"]);
+        Route::post("login", [\App\Containers\User\Http\Controllers\AuthController::class, "login"]);
+        Route::post("logout", [\App\Containers\User\Http\Controllers\AuthController::class, "logout"]);
+        Route::post("register", [\App\Containers\User\Http\Controllers\AuthController::class, "register"]);
     });
 
 
-Route::resource("appointments", \App\Http\Controllers\AppointmentController::class)
+Route::resource("appointments", \App\Containers\Appointment\Http\Controllers\AppointmentController::class)
     ->except(["create", "edit"])
     ->middleware('auth:sanctum');
 
 Route::prefix("users")
     ->middleware('auth:sanctum')
     ->group(function () {
-        Route::get("", [\App\Http\Controllers\UserController::class, "index"]);
+        Route::get("", [\App\Containers\User\Http\Controllers\UserController::class, "index"]);
     });
