@@ -1,84 +1,107 @@
 <script setup>
-import {Button, Modal} from "flowbite-vue";
-import {nextTick, onMounted, ref} from "vue";
+import {Badge, Button, Modal} from "flowbite-vue";
+import {onMounted, ref} from "vue";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
-import AppointmentsTable from "@/components/appointments-table/AppointmentsTable.vue";
-import {useStore} from "vuex";
-import {SET_IS_LOADING} from "@/store/mutation-types.js";
 import {useAppointments} from "@/hooks/useAppointments.js";
 import XPagination from "@/components/pagination/XPagination.vue";
+import {SERVICES_OPTIONS} from "@/constants/domain.js";
+import {Icon} from "@iconify/vue";
+import EnumLabel from "@/components/enum-label/EnumLabel.vue";
+import {useRootStore} from "@/store/useRootStore.js";
+import {useAppointmentForm} from "@/components/appointment-form/useAppointmentForm.js";
+import DisplayField from "@/components/display-field/DisplayField.vue";
 
-
-const store = useStore();
+const rootStore = useRootStore();
+const {appointments, loadAppointments, pagination} = useAppointments();
 
 const {
-    appointments,
-    loadAppointments,
-    pagination,
-} = useAppointments();
+    formModalIsVisible,
+    openAppointmentFormModal,
+    closeAppointmentFormModal
+} = useAppointmentForm();
 
-const apptFormDialog = ref({
-    isOpen: false,
-    id    : null,
-});
-
-function handleOnApptSubmitted() {
-    apptFormDialog.value = {
-        id    : null,
-        isOpen: false,
-    };
+function onClickSaveAppointment() {
     loadAppointments();
 }
 
-function handleOpenApptForm(appointment) {
-    apptFormDialog.value = {
-        id    : appointment?.id,
-        isOpen: true,
-    };
-}
-
 onMounted(async () => {
-    store.commit(SET_IS_LOADING, true)
-    await loadAppointments();
-    nextTick(() => {
-        store.commit(SET_IS_LOADING, false)
-    })
+    rootStore.toggleLoader(true);
+    await loadAppointments().finally(() => rootStore.toggleLoader(false))
 })
 </script>
 
 <template>
     <div class="flex flex-col flex-grow p-2 overflow-hidden">
-        <div class="flex flex-none items-center justify-end bg-white rounded-xl p-2 shadow">
-            <Button @click="handleOpenApptForm">{{ $t("create_appointment") }}</Button>
+
+        <div class="flex flex-none justify-between w-full">
+            <x-pagination
+                v-bind="{...pagination}"
+                @change:page="loadAppointments"
+            />
+
+            <div>
+                <Button class="shadow-sm">
+                    {{ $t('create_appointment') }}
+                    <template #suffix>
+                        <Icon class="text-xl" icon="icon-park-outline:plus"/>
+                    </template>
+                </Button>
+            </div>
         </div>
 
-        <div class="flex flex-col flex-grow overflow-hidden bg-white rounded-xl shadow p-1 mt-2">
-            <div class="flex flex-grow w-full overflow-hidden">
-                <appointments-table :items="appointments" @click:edit="handleOpenApptForm"/>
-            </div>
-            <div class="flex flex-none justify-center w-full">
-                <x-pagination
-                    :current-page="pagination.current_page"
-                    :total-pages="pagination.total_pages"
-                    @page-changed="loadAppointments($event)"
-                />
-            </div>
+        <div class="flex flex-col flex-grow relative overflow-auto mt-2">
+            <ul class="space-y-2">
+                <li v-for="item in appointments" :key="item.id">
+                    <div class="flex relative w-full items-center bg-white rounded-xl shadow-sm p-2 cursor-pointer">
+                        <div class="absolute top-1 right-0">
+                            <div class="flex flex-col md:flex-row md:items-center">
+                                <enum-label
+                                    :value="item.service_name"
+                                    :options="Object.values(SERVICES_OPTIONS)"
+                                />
+                                <Badge class="mt-1 md:mt-0">{{ item.date }}</Badge>
+                            </div>
+                        </div>
+
+                        <div
+                            class="inline-flex shrink-0 grow-0 text-white text-lg items-center justify-center font-semibold shadow-md rounded-full bg-gradient-to-tl from-indigo-400 via-indigo-500 to-indigo-600 w-8 h-8 lg:w-10 lg:h-10"
+                        >
+                            {{ item.patient_name_initials }}
+                        </div>
+
+                        <div class="flex flex-col items-start ml-3">
+                            <h1 class="text-xl font-semibold text-blue-950">{{ item.patient_name }}</h1>
+                            <div class="mt-1 flex flex-col md:flex-row md:items-center md:divide-x">
+                                <display-field
+                                    variant="tiny"
+                                    label="Моб"
+                                    :value="item.patient_phone"
+                                    class="px-1"
+                                />
+                                <display-field
+                                    variant="tiny"
+                                    label="Лікар"
+                                    :value="item.doctor_name"
+                                    class="px-1"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 
     <!--Modals-->
     <teleport to="#x__modals">
-        <Modal v-if="apptFormDialog.isOpen" @close="apptFormDialog.isOpen = false">
+        <Modal v-if="formModalIsVisible" @close="closeAppointmentFormModal">
             <template #header>
                 <div class="flex items-center text-lg">
                     {{ $t('appointment') }}
                 </div>
             </template>
             <template #body>
-                <appointment-form
-                    :appointment-id="apptFormDialog.id"
-                    @submit="handleOnApptSubmitted"
-                />
+                <appointment-form/>
             </template>
         </Modal>
     </teleport>

@@ -9,10 +9,10 @@ export default {
     ],
     theme  : {
         colors: {
-            white: '#ffffff',
-            black: '#000',
-            gray: {
-                '50': '#fafafb',
+            white   : '#ffffff',
+            black   : '#000',
+            gray    : {
+                '50' : '#fafafb',
                 '100': '#ededf1',
                 '200': '#d8d9df',
                 '300': '#b5b6c4',
@@ -24,8 +24,8 @@ export default {
                 '900': '#383842',
                 '950': '#25252c',
             },
-            'blue': {
-                '50': '#f2f8fd',
+            'blue'  : {
+                '50' : '#f2f8fd',
                 '100': '#e3eefb',
                 '200': '#c2def5',
                 '300': '#8cc3ed',
@@ -37,8 +37,8 @@ export default {
                 '900': '#173e63',
                 '950': '#0f2842',
             },
-            'green': {
-                '50': '#eefbf2',
+            'green' : {
+                '50' : '#eefbf2',
                 '100': '#d6f5de',
                 '200': '#afebc2',
                 '300': '#7cd9a0',
@@ -50,7 +50,7 @@ export default {
                 '900': '#0e462b',
                 '950': '#072719',
             },
-            'sail': {
+            'sail'  : {
                 '50' : '#f0f9ff',
                 '100': '#e0f3fe',
                 '200': '#b3e5fc',
@@ -64,7 +64,7 @@ export default {
                 '950': '#093148',
             },
             'indigo': {
-                '50': '#f1f6fc',
+                '50' : '#f1f6fc',
                 '100': '#e6eef9',
                 '200': '#d1dff4',
                 '300': '#b5caec',
@@ -76,8 +76,8 @@ export default {
                 '900': '#3e4671',
                 '950': '#242842',
             },
-            'java': {
-                '50': '#edfefd',
+            'java'  : {
+                '50' : '#edfefd',
                 '100': '#d1fcfc',
                 '200': '#a9f8f8',
                 '300': '#6df1f3',

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Abstractions\Controller\Controller;
-use App\Action\RegisterUserAction;
 use App\Http\Requests\RegisterUserRequest;
+use App\Models\User;
 use App\Transformers\UserTransformer;
 use App\Utils\LoggerUtil;
 use App\Utils\ResponseUtil;
@@ -97,8 +97,36 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request): JsonResponse
     {
         try {
-            LoggerUtil::variable($request->toArray());
-            $user = (new RegisterUserAction($request->getUserDto()))->handle();
+            $userDto = $request->getUserDto();
+            $user = User::query()
+                ->where('phone', $userDto->phone)
+                ->first();
+
+            if (!$user) {
+                $user = User::create($userDto->toArray());
+                return fractal($user)
+                    ->transformWith(new UserTransformer())
+                    ->serializeWith(ArraySerializer::class)
+                    ->respond();
+            }
+
+            if ($user->is_active) {
+                $userData = fractal($user)
+                    ->transformWith(new UserTransformer())
+                    ->serializeWith(ArraySerializer::class)
+                    ->toArray();
+
+                return response()->json([
+                    'message' => 'User already exists',
+                    'user'    => $userData
+                ], 422);
+            }
+
+            $data = $userDto->toArray();
+            $data["password"] = \Hash::make($userDto->password);
+            $data['is_active'] = true;
+            $user->update($data);
+
             return fractal($user)
                 ->transformWith(new UserTransformer())
                 ->serializeWith(ArraySerializer::class)

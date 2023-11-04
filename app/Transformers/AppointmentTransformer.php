@@ -47,6 +47,7 @@ class AppointmentTransformer extends TransformerAbstract
         if ($appointment instanceof AppointmentPivotView) {
             $result['doctor_name'] = $appointment->doctor_name;
             $result['patient_name'] = $appointment->patient_name;
+            $result['patient_name_initials'] = TransformersUtil::getInitials($appointment->patient_name);
             $result['patient_phone'] = $appointment->patient_phone;
         }
 

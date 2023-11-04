@@ -30,6 +30,7 @@ class UserTransformer extends TransformerAbstract
         return [
             'id'                         => (string)$user->id,
             'name'                       => $user->name,
+            'initials'                   => TransformersUtil::getInitials($user->name),
             'login'                      => $user->login,
             'email'                      => $user->email,
             'phone'                      => $user->phone,

@@ -3,7 +3,6 @@ import {computed, defineComponent, h} from "vue";
 import {Badge} from "flowbite-vue";
 
 export default defineComponent({
-    //TODO: add itemKey, itemValue
     props: {
         value: {
             type: [String, Number]

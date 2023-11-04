@@ -1,16 +1,20 @@
 <script>
 import {defineComponent} from "vue";
 import LoadingIndicator from "@/components/loading-indicator/LoadingIndicator.vue";
-import {mapState} from "vuex";
+import {useRootStore} from "@/store/useRootStore.js";
 
 export default defineComponent({
     components: {
         LoadingIndicator,
     },
-    computed  : {
-        ...mapState({
-            isLoading: state => state.isLoading,
-        })
+    setup() {
+        const rootStore = useRootStore();
+        return {rootStore};
+    },
+    computed: {
+        isLoading() {
+            return this.rootStore.showLoader;
+        },
     }
 })
 </script>

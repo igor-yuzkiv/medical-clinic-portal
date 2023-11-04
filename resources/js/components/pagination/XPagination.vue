@@ -1,99 +1,85 @@
-<script setup>
+<script>
+import {defineComponent} from "vue";
+import {Icon} from "@iconify/vue";
 
-import {computed} from "vue";
-
-const emit = defineEmits(['pageChanged']);
-const props = defineProps({
-    currentPage: {
-        type   : Number,
-        default: 1,
+export default defineComponent({
+    components: {Icon},
+    emits     : ["click:next", "click:prev", "change:page"],
+    props     : {
+        per_page    : {
+            type   : Number,
+            default: 1,
+        },
+        current_page: {
+            type   : Number,
+            default: 1,
+        },
+        total       : {
+            type   : Number,
+            default: 0,
+        },
+        total_pages : {
+            type   : Number,
+            default: 0,
+        }
     },
-    totalPages : {
-        type   : Number,
-        default: 1,
+    computed  : {
+        getShowedRecords() {
+            const showedRecords = this.current_page * this.per_page
+            return (showedRecords <= this.total) ? showedRecords : this.total;
+        },
+        hasPrevPage() {
+            return (this.current_page > 1)
+        },
+        hasNextPage() {
+            return (this.current_page < this.total_pages)
+        }
     },
-    maxOnSide  : {
-        type   : Number,
-        default: 4,
-    },
+    methods   : {
+        onClickNextPage() {
+            if (!this.hasNextPage) {
+                return;
+            }
+            this.$emit("change:page", this.current_page + 1);
+            this.$emit("click:next", this.current_page + 1);
+        },
+        onClickPrevPage() {
+            if (!this.hasPrevPage) {
+                return;
+            }
+            this.$emit("change:page", this.current_page - 1);
+            this.$emit("click:prev", this.current_page - 1);
+        }
+    }
 })
-
-const pages = computed(() => {
-    let start = Math.max(1, props.currentPage - props.maxOnSide);
-    let end = Math.min(props.totalPages, props.currentPage + props.maxOnSide);
-
-    start = Math.max(1, end - props.maxOnSide * 2);
-    end = Math.min(props.totalPages, start + props.maxOnSide * 2);
-    return Array.from({length: end - start + 1}, (_, i) => i + start)
-})
-
-const hasNext = computed(() => props.currentPage < props.totalPages);
-const hasPrevious = computed(() => props.currentPage > 1);
-
-function changePage(page) {
-    if (page === props.currentPage) {
-        return;
-    }
-    emit('pageChanged', page);
-}
-
-function nextPage() {
-    if (hasNext.value) {
-        changePage(props.currentPage + 1);
-    }
-}
-
-function previousPage() {
-    if (hasPrevious.value) {
-        changePage(props.currentPage - 1);
-    }
-}
-
 </script>
 
 <template>
-    <nav aria-label="Page navigation example">
-        <ul class="inline-flex -space-x-px text-sm">
-            <li>
-                <div
-                    class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg"
-                    :class="{
-                        'hover:bg-gray-100 hover:text-gray-700 cursor-pointer': hasPrevious,
-                    }"
-                    @click="previousPage"
-                >
-                    Previous
-                </div>
-            </li>
+    <div class="flex items-center justify-end gap-x-3">
+        <button
+            class="inline-flex items-center"
+            :class="!hasPrevPage ? 'text-gray-500' : ''"
+            title="Previous"
+            @click="onClickPrevPage"
+            :disabled="!hasPrevPage"
+        >
+            <Icon class="text-lg" icon="mdi-chevron-left"></Icon>
+        </button>
 
-            <li
-                v-for="item in pages" :key="item"
-                @click="changePage(item)"
-            >
-                <div
-                    class="flex items-center justify-center px-3 h-8 leading-tight bg-white border border-gray-300"
-                    :class="{
-                        'text-blue-500': item === currentPage,
-                        'text-gray-500 cursor-pointer hover:bg-gray-100 hover:text-gray-700': item !== currentPage,
-                    }"
-                >
-                    {{ item }}
-                </div>
-            </li>
+        <div class="font-medium">
+            {{ current_page }} із {{ total_pages }}
+        </div>
 
-            <li>
-                <div
-                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg"
-                    :class="{
-                        'hover:bg-gray-100 hover:text-gray-700 cursor-pointer': hasNext,
-                    }"
-                    @click="nextPage"
-                >
-                    Next
-                </div>
-            </li>
-        </ul>
-    </nav>
+        <button
+            class="inline-flex items-center"
+            :class="!hasNextPage ? 'text-gray-500' : ''"
+            title="Next"
+            @click="onClickNextPage"
+            :disabled="!hasNextPage"
+        >
+            <Icon class="text-lg" icon="mdi-chevron-right"></Icon>
+        </button>
+    </div>
 </template>
 
 <style scoped>

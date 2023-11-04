@@ -2,15 +2,14 @@
 import {Icon} from "@iconify/vue";
 import {defineComponent} from "vue";
 import axios from "axios";
-import {fetchCurrentUser, loginRequest} from "@/api/usersApi.js";
-import {SET_AUTH_TOKEN, SET_CURRENT_USER, SET_IS_LOADING} from "@/store/mutation-types.js";
+import {loginRequest} from "@/api/usersApi.js";
 import {HOME_ROUTE_NAME} from "@/constants/navigation.js";
+import {useRootStore} from "@/store/useRootStore.js";
+import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 
 export default defineComponent({
     inject    : ['toast'],
-    components: {
-        Icon
-    },
+    components: {Icon},
     data() {
         return {
             showPassword: false,
@@ -20,39 +19,32 @@ export default defineComponent({
             }
         }
     },
-    async mounted() {
-        const user = await fetchCurrentUser()
-            .then((response) => response?.data ?? {})
-            .catch(() => {
-            })
-
-        if (user?.id) {
-            this.$store.commit(SET_CURRENT_USER, user)
-            this.$router.push({name: HOME_ROUTE_NAME})
-        }
+    setup() {
+        const rootStore = useRootStore();
+        const currentUserStore = useCurrentUserStore();
+        return {rootStore, currentUserStore};
     },
     methods: {
-        async handleLogin() {
+        async onClickLogin() {
             if (!this.formData.login || !this.formData.password) {
                 this.toast.error(this.$t('login_and_password_required'))
                 return
             }
 
-            this.$store.commit(SET_IS_LOADING, true)
+            this.rootStore.toggleLoader(true)
+
             const response = await axios.get("/sanctum/csrf-cookie")
                 .then(() => loginRequest(this.formData))
                 .then((response) => response?.data ?? {})
                 .catch(() => this.toast.error(this.$t('invalid_credentials')))
-                .finally(() => {
-                    this.$store.commit(SET_IS_LOADING, false)
-                })
+                .finally(() => this.rootStore.toggleLoader(false))
 
             const {user, token} = response ?? {};
             if (!token || !user?.id) {
                 return;
             }
-            this.$store.commit(SET_CURRENT_USER, user)
-            this.$store.commit(SET_AUTH_TOKEN, token)
+
+            this.currentUserStore.setCurrentUser(user);
             localStorage.setItem('token', token)
             this.$router.push({name: HOME_ROUTE_NAME})
         }
@@ -106,7 +98,7 @@ export default defineComponent({
             <button
                 type="button"
                 class="block w-full mt-7 py-3 px-2 bg-indigo-500 text-white uppercase font-semibold rounded-full hover:bg-indigo-600"
-                @click="handleLogin"
+                @click="onClickLogin"
             >
                 {{ $t("sign_in_now") }}
             </button>

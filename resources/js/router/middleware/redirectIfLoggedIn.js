@@ -1,6 +1,6 @@
+import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 import {fetchCurrentUser} from "@/api/usersApi.js";
 import {ROUTES} from "@/constants/navigation.js";
-import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 
 export default async function (to, from, next) {
     const currentUserStore = useCurrentUserStore();
@@ -8,11 +8,11 @@ export default async function (to, from, next) {
         .then(({data}) => data)
         .catch(() => null);
 
-    if (!response?.id) {
-        await currentUserStore.logout();
-        next({name: ROUTES.login.name});
+    if (response?.id) {
+        currentUserStore.setCurrentUser(response)
+        next({name: ROUTES.home.name});
         return;
     }
-    currentUserStore.setCurrentUser(response)
+
     next();
 }

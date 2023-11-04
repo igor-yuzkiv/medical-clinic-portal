@@ -1,24 +1,18 @@
 <script setup>
 import {ref} from "vue";
 import {useOnClickOutside} from "@/hooks/useOnClickOutside.js";
-import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {ROUTES} from "@/constants/navigation.js";
+import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 
-const store = useStore();
 const router = useRouter();
-
+const currentUserStore = useCurrentUserStore();
 const container = ref(null);
 const isOpen = ref(false);
-const user = {
-    name    : "Ігор Юзьків",
-    initials: 'ІЮ',
-    email   : "iy@crmoz.com"
-};
 
-function handleLogout() {
-    store.dispatch("logout");
-    router.push({name: ROUTES.login.name});
+async function onClickLogout() {
+    await currentUserStore.logout();
+    await router.push({name: ROUTES.login.name});
 }
 
 useOnClickOutside(container, () => isOpen.value = false);
@@ -35,7 +29,7 @@ useOnClickOutside(container, () => isOpen.value = false);
             data-dropdown-placement="bottom"
             @click="isOpen=!isOpen"
         >
-            <span>{{ user?.initials ?? 'UU' }}</span>
+            <span>{{ currentUserStore.getInitials }}</span>
         </button>
         <!-- Dropdown menu -->
         <div
@@ -44,12 +38,12 @@ useOnClickOutside(container, () => isOpen.value = false);
             :class="{hidden: !isOpen}"
         >
             <div class="px-4 py-3">
-                <span class="truncate block text-sm text-gray-100">{{ user.name }}</span>
+                <span class="truncate block text-sm text-gray-100">{{ currentUserStore.getName }}</span>
             </div>
 
             <div class="divide-y divide-gray-600">
                 <button
-                    @click="handleLogout"
+                    @click="onClickLogout"
                     class="block w-full px-4 py-2 text-sm hover:bg-gray-00 text-gray-200 hover:text-white rounded-b-lg"
                 >
                     {{ $t('sign_out_now') }}
