@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Ship\Http\Controllers;
+namespace App\Ship\Http\Controllers;
 
 use App\Abstractions\Controller\Controller;
 

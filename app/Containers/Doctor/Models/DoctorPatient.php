@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Containers\User\Models;
+namespace App\Containers\Doctor\Models;
 
 use App\Containers\Patient\Models\Patient;
+use App\Containers\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

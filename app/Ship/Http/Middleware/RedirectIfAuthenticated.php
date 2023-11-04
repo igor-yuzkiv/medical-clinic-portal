@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Providers\Ship\Http\Middleware;
+namespace App\Ship\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
+use App\Ship\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
