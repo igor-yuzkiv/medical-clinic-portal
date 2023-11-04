@@ -3,6 +3,7 @@
 namespace App\Containers\Appointment\Models;
 
 use App\Abstractions\Filter\HasFilter;
+use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -50,6 +51,6 @@ class Appointment extends Model
      */
     public function patient(): HasOne
     {
-        return $this->hasOne(User::class, "id", "patient_id");
+        return $this->hasOne(Patient::class, "id", "patient_id");
     }
 }

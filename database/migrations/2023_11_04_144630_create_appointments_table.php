@@ -22,7 +22,7 @@ return new class extends Migration {
 
             $table->foreign("patient_id")
                 ->references("id")
-                ->on("users")
+                ->on("patients")
                 ->onDelete("cascade");
 
             $table->softDeletes();

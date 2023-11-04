@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from "vue";
-import {useOnClickOutside} from "@/hooks/useOnClickOutside.js";
+import {useOnClickOutside} from "@/composable/useOnClickOutside.js";
 import {useRouter} from "vue-router";
 import {ROUTES} from "@/constants/navigation.js";
 import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";

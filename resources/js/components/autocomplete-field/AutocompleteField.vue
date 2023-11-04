@@ -1,7 +1,7 @@
 <script setup>
 import {Input} from "flowbite-vue";
 import {onMounted, ref} from "vue";
-import {useOnClickOutside} from "@/hooks/useOnClickOutside.js";
+import {useOnClickOutside} from "@/composable/useOnClickOutside.js";
 import {Icon} from "@iconify/vue";
 
 const emit = defineEmits(['update:modelValue', 'click:append'])
@@ -20,8 +20,7 @@ const props = defineProps({
     },
     itemsProvider: {
         type   : Function,
-        default: () => {
-        }
+        default: null
     },
     label        : {
         type   : String,
@@ -30,6 +29,10 @@ const props = defineProps({
     appendIcon   : {
         type   : String,
         default: null
+    },
+    required   : {
+        type   : Boolean,
+        default: false
     },
 })
 
@@ -50,7 +53,7 @@ function handleHideList() {
 }
 
 async function handleLoadItems() {
-    if (!props.itemsProvider) {
+    if (typeof props.itemsProvider !== "function") {
         console.warn("itemsProvider must be a function");
         return;
     }
@@ -98,7 +101,11 @@ useOnClickOutside(containerRef, handleHideList)
 <template>
     <div class="relative" ref="containerRef">
         <div class="flex items-center gap-x-1">
-            <label class="font-medium text-sm">{{ label }}</label>
+
+            <label class="font-medium text-sm">
+                <span v-if="required" class="text-red-500 font-semibold">*</span>
+                {{ label }}
+            </label>
 
             <!--loading indicator-->
             <div role="status" v-if="isLoading">

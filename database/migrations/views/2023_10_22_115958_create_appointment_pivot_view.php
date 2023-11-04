@@ -25,7 +25,7 @@ return new class extends Migration {
                    patient.phone as 'patient_phone',
                    doctor.name as 'doctor_name'
             from appointments
-                inner join users as patient on appointments.patient_id = patient.id
+                inner join patients as patient on appointments.patient_id = patient.id
                 inner join users as doctor on appointments.doctor_id = doctor.id
         SQL;
     }

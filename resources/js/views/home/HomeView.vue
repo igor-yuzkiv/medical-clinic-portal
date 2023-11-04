@@ -2,7 +2,7 @@
 import {Badge, Button} from "flowbite-vue";
 import {onMounted} from "vue";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
-import {useAppointments} from "@/hooks/useAppointments.js";
+import {useAppointments} from "@/composable/useAppointments.js";
 import XPagination from "@/components/pagination/XPagination.vue";
 import {SERVICES_OPTIONS} from "@/constants/domain.js";
 import {Icon} from "@iconify/vue";
@@ -16,13 +16,17 @@ const rootStore = useRootStore();
 const {appointments, loadAppointments, pagination} = useAppointments();
 
 const {
+    formValue,
+    createAppointment,
     formModalIsVisible,
     openAppointmentFormModal,
     closeAppointmentFormModal
 } = useAppointmentForm();
 
-function onClickSaveAppointment() {
-    loadAppointments();
+async function onClickSaveAppointment() {
+    rootStore.toggleLoader(true);
+    await createAppointment();
+    rootStore.toggleLoader(false);
 }
 
 onMounted(async () => {
@@ -35,10 +39,13 @@ onMounted(async () => {
     <div class="flex flex-col flex-grow p-2 overflow-hidden">
 
         <div class="flex flex-none justify-between w-full">
-            <x-pagination
-                v-bind="{...pagination}"
-                @change:page="loadAppointments"
-            />
+            <div>
+                <x-pagination
+                    v-if="appointments?.length"
+                    v-bind="{...pagination}"
+                    @change:page="loadAppointments"
+                />
+            </div>
 
             <div>
                 <Button class="shadow-sm" @click="openAppointmentFormModal">
@@ -51,7 +58,7 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-col flex-grow relative overflow-auto mt-2">
-            <ul class="space-y-2">
+            <ul class="space-y-2" v-if="appointments?.length">
                 <li v-for="item in appointments" :key="item.id">
                     <div class="flex relative w-full items-center bg-white rounded-xl shadow-sm p-2 cursor-pointer">
                         <div class="absolute top-1 right-0">
@@ -75,13 +82,13 @@ onMounted(async () => {
                             <div class="mt-1 flex flex-col md:flex-row md:items-center md:divide-x">
                                 <display-field
                                     variant="tiny"
-                                    label="Моб"
+                                    :label="$t('patient_phone')"
                                     :value="item.patient_phone"
                                     class="px-1"
                                 />
                                 <display-field
                                     variant="tiny"
-                                    label="Лікар"
+                                    :label="$t('doctor')"
                                     :value="item.doctor_name"
                                     class="px-1"
                                 />
@@ -90,13 +97,37 @@ onMounted(async () => {
                     </div>
                 </li>
             </ul>
+
+            <!--Records not fount-->
+            <div
+                v-else
+                class="flex flex-col flex-grow items-center justify-center text-gray-400 text-center cursor-pointer"
+                @click="openAppointmentFormModal"
+            >
+                <Icon icon="cil:sad" class="w-64 h-64"/>
+                <h1 class="text-3xl">{{ $t('no_records_found') }}, <br/> {{ $t('do_create_one') }}</h1>
+            </div>
         </div>
     </div>
 
     <!--Modals-->
     <teleport to="#x__modals">
-        <x-modal v-model="formModalIsVisible" @close="closeAppointmentFormModal">
-            <appointment-form/>
+        <x-modal
+            v-model="formModalIsVisible" overlay
+            @close="closeAppointmentFormModal"
+            card-class="w-auto lg:w-3/6 xl:w-2/6 p-2 h-auto"
+        >
+            <div class="flex flex-col transition-all duration-250">
+                <appointment-form v-model="formValue"/>
+                <div class="flex items-center justify-between mt-3 pt-2 border-t">
+                    <Button outline @click="closeAppointmentFormModal">
+                        {{ $t('cancel') }}
+                    </Button>
+                    <Button @click="onClickSaveAppointment">
+                        {{ $t('save') }}
+                    </Button>
+                </div>
+            </div>
         </x-modal>
     </teleport>
 </template>

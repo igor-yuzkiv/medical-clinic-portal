@@ -1,46 +1,88 @@
-import {reactive, ref} from "vue";
-import {object} from "yup";
+import {inject, ref} from "vue";
+import * as Yup from "yup";
+import {i18n} from "@/plugins/i18n";
 import {appointmentApi} from "@/api/appointmentApi.js";
 
-export const formInitialValue = () => ({});
+export const formInitialValue = () => ({
+    id            : null,
+    patient_id    : null,
+    patient_name  : '',
+    patient_phone : '',
+    service_name  : '',
+    date_time     : '',
+    is_new_patient: false,
+});
 
-export const formValidationSchema = () => object({
-    patient_id   : '',
-    patient_name : '',
-    patient_phone: '',
-    service_name : '',
-    date_time    : '',
+export const formValidationSchema = () => Yup.object({
+    is_new_patient: Yup.boolean(),
+    patient_id    : Yup.string()
+        .when('is_new_patient', {
+            is       : false,
+            then     : (schema) => schema.required(i18n.global.t('patient_is_required')),
+            otherwise: (schema) => schema.nullable()
+        }),
+    patient_name  : Yup.string()
+        .when('is_new_patient', {
+            is       : true,
+            then     : (schema) => schema.required(i18n.global.t('patient_name_is_required')),
+            otherwise: (schema) => schema.nullable()
+        }),
+    patient_phone : Yup.string()
+        .when('is_new_patient', {
+            is       : true,
+            then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')),
+            otherwise: (schema) => schema.nullable()
+        }),
+    service_name  : Yup.string().required(i18n.global.t('service_is_required')),
+    date_time     : Yup.string().required(i18n.global.t('date_is_required')),
 });
 
 export function useAppointmentForm() {
-    const formValue = ref({})
+    const formValue = ref(formInitialValue())
     const formModalIsVisible = ref(false);
+    const toast = inject("toast");
 
-    async function validateForm(showError = true) {
-
+    async function validateForm() {
+        return await formValidationSchema()
+            .validate(formValue.value, {abortEarly: true})
+            .catch(({message}) => {
+                toast.error(message);
+            })
     }
 
     async function createAppointment() {
-
+        const data = await validateForm();
+        return await appointmentApi
+            .create(data)
+            .then(({data}) => data)
+            .catch(() => {
+                toast.error(i18n.global.t("something_went_wrong"))
+            })
     }
 
-    async function updateAppointment() {
-        console.log('updateAppointment')
+    async function updateAppointment(id) {
+        const data = await validateForm();
+        return await appointmentApi
+            .update(id, data)
+            .then(({data}) => data)
+            .catch(() => {
+                toast.error(i18n.global.t("something_went_wrong"))
+            })
     }
 
     async function loadAppointment(id) {
-        const response = await appointmentApi
+        /*const response = await appointmentApi
             .getById(id)
             .then(({data}) => data)
             .catch(console.error)
 
-        console.log(response);
+        console.log(response);*/
     }
 
     async function openAppointmentFormModal(id) {
         if (id) {
             await loadAppointment(id);
-        }else {
+        } else {
             formValue.value = formInitialValue();
         }
 

@@ -17,11 +17,12 @@ class SaveAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id'    => ['nullable', 'integer'],
-            'patient_name'  => ['nullable', 'string', 'required_without:patient_id'],
-            'patient_phone' => ['nullable', 'string', 'required_without:patient_id'],
-            'date_time'     => ['required', 'date'],
-            'service_name'  => ['required'],
+            'patient_id'     => ['nullable', 'integer'],
+            'patient_name'   => ['nullable', 'string', 'required_without:patient_id'],
+            'patient_phone'  => ['nullable', 'string', 'required_without:patient_id'],
+            'service_name'   => ['required'],
+            'date_time'      => ['required', 'date'],
+            'is_new_patient' => ['bool'],
         ];
     }
 

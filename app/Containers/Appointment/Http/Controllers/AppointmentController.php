@@ -4,7 +4,7 @@ namespace App\Containers\Appointment\Http\Controllers;
 
 use App\Abstractions\Controller\ResourceController;
 use App\Abstractions\Serializer\DataArraySerializer;
-use App\Containers\Appointment\Actions\CreateAppointmentProcedure;
+use App\Containers\Appointment\Actions\CreateAppointmentAction;
 use App\Containers\Appointment\Http\Requests\SaveAppointmentRequest;
 use App\Containers\Appointment\Models\Appointment;
 use App\Containers\Appointment\Models\Views\AppointmentPivotView;
@@ -59,7 +59,7 @@ class AppointmentController extends ResourceController
     public function store(SaveAppointmentRequest $request): JsonResponse
     {
         try {
-            $appointment = (new CreateAppointmentProcedure($request->getAppointmentDto()))->handle();
+            $appointment = (new CreateAppointmentAction($request->getAppointmentDto()))->handle();
             return fractal($appointment)
                 ->serializeWith(ArraySerializer::class)
                 ->transformWith(new AppointmentTransformer())

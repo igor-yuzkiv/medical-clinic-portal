@@ -6,12 +6,13 @@ use App\Abstractions\Action\ActionInterface;
 use App\Containers\Appointment\DTO\AppointmentDto;
 use App\Containers\Appointment\Models\Appointment;
 use App\Containers\Patient\Actions\CreatePatientAction;
+use App\Containers\User\Enums\UserRoleEnum;
 use App\Containers\User\Models\User;
 
 /**
  *
  */
-class CreateAppointmentProcedure implements ActionInterface
+class CreateAppointmentAction implements ActionInterface
 {
     /**
      * @param AppointmentDto $appointmentDto
@@ -28,17 +29,24 @@ class CreateAppointmentProcedure implements ActionInterface
      */
     public function handle(): Appointment
     {
-        if (!isset($this->appointmentDto->patient_id)) {
-            $this->appointmentDto->patient_id = $this->createPatient()->id;
+        if ($this->appointmentDto->is_new_patient) {
+            $this->appointmentDto->patient_id = $this->createNewPatient();
         }
+
         return Appointment::create($this->appointmentDto->toArray());
     }
 
     /**
-     * @return User
+     * @return int
      */
-    private function createPatient(): User
+    private function createNewPatient(): int
     {
-        return (new CreatePatientAction($this->appointmentDto->patient))->handle();
+        $doctor = User::where("role", UserRoleEnum::DOCTOR)
+            ->where('id', $this->appointmentDto->doctor_id)
+            ->firstOrFail();
+
+        $patient = (new CreatePatientAction($this->appointmentDto->patient, $doctor))->handle();
+
+        return $patient->id;
     }
 }
