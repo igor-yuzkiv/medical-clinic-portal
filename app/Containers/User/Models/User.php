@@ -2,13 +2,14 @@
 
 namespace App\Containers\User\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Abstractions\Filter\HasFilter;
+use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Enums\GenderEnum;
 use App\Containers\User\Enums\UserRoleEnum;
 use App\Containers\User\Filters\SearchUserFilter;
 use App\Containers\User\Filters\UserRoleFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -77,5 +78,13 @@ class User extends Authenticatable
     public function getAuthIdentifierName(): string
     {
         return 'login';
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function patients(): BelongsToMany
+    {
+        return $this->belongsToMany(Patient::class, 'doctor_patient', 'doctor_id', 'patient_id');
     }
 }
