@@ -7,6 +7,8 @@ use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Enums\GenderEnum;
 use App\Containers\User\Enums\UserRoleEnum;
 use App\Containers\User\Filters\UserRoleFilter;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -84,5 +86,13 @@ class User extends Authenticatable
     public function patients(): BelongsToMany
     {
         return $this->belongsToMany(Patient::class, 'doctor_patient', 'doctor_id', 'patient_id');
+    }
+
+    /**
+     * @return Factory
+     */
+    public static function newFactory(): Factory
+    {
+        return UserFactory::new();
     }
 }

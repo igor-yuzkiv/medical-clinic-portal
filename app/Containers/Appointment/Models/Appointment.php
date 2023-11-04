@@ -5,6 +5,9 @@ namespace App\Containers\Appointment\Models;
 use App\Abstractions\Filter\HasFilter;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Models\User;
+use Database\Factories\AppointmentFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Appointment extends Model
 {
-    use SoftDeletes, HasFilter;
+    use HasFactory, SoftDeletes, HasFilter;
 
     /**
      * @var string
@@ -52,5 +55,10 @@ class Appointment extends Model
     public function patient(): HasOne
     {
         return $this->hasOne(Patient::class, "id", "patient_id");
+    }
+
+    public static function newFactory(): Factory
+    {
+        return AppointmentFactory::new();
     }
 }

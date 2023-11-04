@@ -111,18 +111,20 @@ onMounted(async () => {
                         <div class="flex flex-col items-start ml-3">
                             <h1 class="text-xl font-semibold text-blue-950">{{ item.patient_name }}</h1>
                             <div class="mt-1 flex flex-col md:flex-row md:items-center md:divide-x">
-                                <display-field
-                                    variant="tiny"
-                                    :label="$t('patient_phone')"
-                                    :value="item.patient_phone"
-                                    class="px-1"
-                                />
-                                <display-field
-                                    variant="tiny"
-                                    :label="$t('doctor')"
-                                    :value="item.doctor_name"
-                                    class="px-1"
-                                />
+                                <div class="flex text-lg items-center gap-x-1 px-1">
+                                    <span class="text-gray-700 text-sm">{{$t('short_phone')}}:</span>
+                                    <a
+                                        :href="`tel:${item.patient_phone}`"
+                                        class="text-blue-600 hover:underline cursor-pointer text-sm"
+                                    >
+                                        {{item.patient_phone}}
+                                    </a>
+                                </div>
+
+                                <div class="flex text-lg items-center gap-x-1 px-1">
+                                    <span class="text-gray-700 text-sm">{{$t('doctor')}}:</span>
+                                    <span class="text-alabaster-800 text-sm">{{item.doctor_name}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

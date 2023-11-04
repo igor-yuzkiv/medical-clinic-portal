@@ -7,6 +7,9 @@ use App\Containers\Patient\Filters\DoctorPatientsFilter;
 use App\Containers\Patient\Filters\SearchPatientFilter;
 use App\Containers\User\Enums\GenderEnum;
 use App\Containers\User\Models\User;
+use Database\Factories\PatientFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Patient extends Model
 {
-    use SoftDeletes, HasFilter;
+    use HasFactory, SoftDeletes, HasFilter;
 
     /**
      * @var string
@@ -65,5 +68,13 @@ class Patient extends Model
     public function doctors(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'doctor_patient', 'patient_id', 'doctor_id');
+    }
+
+    /**
+     * @return Factory
+     */
+    public static function newFactory(): Factory
+    {
+        return PatientFactory::new();
     }
 }
