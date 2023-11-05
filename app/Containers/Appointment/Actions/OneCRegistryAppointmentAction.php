@@ -28,6 +28,20 @@ class OneCRegistryAppointmentAction extends Job implements ActionInterface
      */
     public function handle(): void
     {
+        try {
+            $this->makeRequest();
+        } catch (\Exception $exception) {
+            LoggerUtil::exception($exception);
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function makeRequest(): void
+    {
         $client = new Client(['verify' => false, 'http_errors' => false]);
         $response = $client->post(
             config("project.one_c.appointment_registry_endpoint"),
@@ -40,7 +54,6 @@ class OneCRegistryAppointmentAction extends Job implements ActionInterface
             "body"   => $response->getBody()->getContents()
         ]);
     }
-
 
     /**
      * @return array
