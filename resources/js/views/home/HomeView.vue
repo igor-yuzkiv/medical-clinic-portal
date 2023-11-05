@@ -128,7 +128,7 @@ onMounted(async () => {
                         </div>
 
                         <div class="flex flex-col ml-1 sm:ml-3 h-full">
-                            <div class="flex items-center gap-x-1 font-semibold truncate">
+                            <div class="flex gap-x-1 font-semibold">
                                 <h1 class="text-gray-500">#{{ item.id }}</h1>
                                 <h1 class="text-xl text-blue-950">{{ item.patient_name }}</h1>
                             </div>

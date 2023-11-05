@@ -33,7 +33,7 @@ onMounted(() => {
 
         <div class="flex items-center h-full justify-start">
             <div class="flex flex-col items-center">
-                <x-avatar circle size="lg">{{ patientInitials }}</x-avatar>
+                <x-avatar class="hidden md:inline-flex" circle size="lg">{{ patientInitials }}</x-avatar>
                 <h1 class="mt-1 font-semibold text-blue-950">{{ patientName }}</h1>
                 <div class="inline-flex items-center gap-x-1 text-sm text-gray-500">
                     <Icon icon="teenyicons:phone-solid"/>
