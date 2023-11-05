@@ -30,7 +30,6 @@ onMounted(() => {
 
 <template>
     <div class="flex flex-col p-2">
-
         <div class="flex items-center h-full justify-start">
             <div class="flex flex-col items-center">
                 <x-avatar class="hidden md:inline-flex" circle size="lg">{{ patientInitials }}</x-avatar>
@@ -47,7 +46,6 @@ onMounted(() => {
                     :value="appointment.service_type"
                 />
             </div>
-
             <div class="flex flex-col justify-start h-full mx-3 md:mx-5 mt-2">
                 <div class="flex flex-col">
                     <h1 class="text-gray-800 font-semibold">{{ $t('doctor') }}:</h1>
@@ -65,12 +63,9 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-
                 <slot></slot>
             </div>
         </div>
-
-
     </div>
 </template>
 
