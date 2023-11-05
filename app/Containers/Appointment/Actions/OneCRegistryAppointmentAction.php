@@ -55,8 +55,8 @@ class OneCRegistryAppointmentAction extends Job implements ActionInterface
 
         return [
             "ZapysID"          => (string)$this->appointment->id,
-            //"DoctorID"         => (string)$doctor->source_id,
-            "DoctorID"         => $testDoctorId,
+            "DoctorID"         => (string)$doctor->source_id,
+            //"DoctorID"         => $testDoctorId,
             "DoctorName"       => $doctor->name,
             "PacientName"      => $patient->name,
             "PacientTelephone" => (string)$patient->phone,
