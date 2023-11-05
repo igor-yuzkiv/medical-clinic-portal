@@ -38,7 +38,7 @@ class AppointmentTransformer extends TransformerAbstract
             'date_time'            => $appointment->date_time ? $appointment->date_time->format('Y-m-d H:i') : null,
             'time'                 => $appointment->date_time ? $appointment->date_time->format('H:i') : null,
             'date'                 => $appointment->date_time ? $appointment->date_time->format('Y-m-d') : null,
-            'service_name'         => $appointment->service_name,
+            'service_type'         => $appointment->service_type,
             'deleted_at'           => $appointment->deleted_at,
             'created_at'           => $appointment->created_at,
             'created_at_formatted' => TransformersUtil::dateTimeFormatted($appointment->created_at),

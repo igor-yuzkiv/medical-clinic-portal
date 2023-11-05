@@ -7,8 +7,8 @@ export const formInitialValue = () => ({
     id            : null,
     patient_id    : null,
     patient_name  : '',
-    patient_phone : '',
-    service_name  : '',
+    patient_phone : '+38 ',
+    service_type  : '',
     date_time     : '',
     is_new_patient: false,
 });
@@ -30,10 +30,10 @@ export const formValidationSchema = () => Yup.object({
     patient_phone : Yup.string()
         .when('is_new_patient', {
             is       : true,
-            then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')),
+            then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')).matches(/^\+\d{12}$/, i18n.global.t('phone_is_invalid')),
             otherwise: (schema) => schema.nullable()
         }),
-    service_name  : Yup.string().required(i18n.global.t('service_is_required')),
+    service_type  : Yup.number().required(i18n.global.t('service_is_required')),
     date_time     : Yup.string().required(i18n.global.t('date_is_required')),
 });
 

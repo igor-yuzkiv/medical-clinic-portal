@@ -13,9 +13,10 @@ class PatientFactory extends Factory
 
     public function definition(): array
     {
+        //'+38098' . random_int(1000000, 9999999),
         return [
             'name'       => $this->faker->name(),
-            'phone'      => $this->faker->phoneNumber(),
+            'phone'      => '+38098' . $this->faker->numberBetween(1000000, 9999999),
             'email'      => $this->faker->unique()->safeEmail(),
             'gender'     => fake()->randomElement([GenderEnum::MALE, GenderEnum::FEMALE]),
             'source_id'  => $this->faker->word(),

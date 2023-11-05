@@ -33,7 +33,7 @@ class AppointmentDto extends DataTransferObject
     /**
      * @var string
      */
-    public string $service_name;
+    public string $service_type;
 
     public bool $is_new_patient = false;
 }

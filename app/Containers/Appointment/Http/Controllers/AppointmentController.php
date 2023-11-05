@@ -4,6 +4,7 @@ namespace App\Containers\Appointment\Http\Controllers;
 
 use App\Abstractions\Controller\ResourceController;
 use App\Abstractions\Serializer\DataArraySerializer;
+use App\Containers\Appointment\Actions\OneCRegistryAppointmentAction;
 use App\Containers\Appointment\Actions\SaveAppointmentAction;
 use App\Containers\Appointment\Http\Requests\SaveAppointmentRequest;
 use App\Containers\Appointment\Models\Appointment;
@@ -60,6 +61,8 @@ class AppointmentController extends ResourceController
     {
         try {
             $appointment = (new SaveAppointmentAction($request->getAppointmentDto()))->handle();
+            dispatch(new OneCRegistryAppointmentAction($appointment))->afterCommit();
+
             return fractal($appointment)
                 ->serializeWith(ArraySerializer::class)
                 ->transformWith(new AppointmentTransformer())

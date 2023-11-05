@@ -1,13 +1,14 @@
 <script setup>
 import AutocompleteField from "@/components/autocomplete-field/AutocompleteField.vue";
 import {Input, Select} from "flowbite-vue";
-import {SERVICES_OPTIONS} from "@/constants/domain.js";
+import {SERVICES_OPTIONS} from "@/constants/enums.js";
 import {uk} from 'date-fns/locale';
 import {computed} from "vue";
-import {DATE_TIME_FORMAT} from "@/constants/domain.js";
+import {DATE_TIME_FORMAT} from "@/constants/enums.js";
 import moment from "moment";
 import {usePatients} from "@/composable/usePatients.js";
 import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
+import {vMaska} from "maska";
 
 const emit = defineEmits(["update:modelValue"])
 const props = defineProps({
@@ -92,6 +93,9 @@ async function handleSearchPatient(search) {
                     {{ $t('patient_phone') }}
                 </label>
                 <Input
+                    v-maska
+                    data-maska="+38##########"
+                    placeholder="+38__________"
                     :model-value="modelValue['patient_phone'] ?? ''"
                     @input="onFieldChange('patient_phone', $event)"
                 />
@@ -106,8 +110,8 @@ async function handleSearchPatient(search) {
             <Select
                 :options="Object.values(SERVICES_OPTIONS)"
                 placeholder="Оберіть послугу"
-                :model-value="modelValue['service_name'] ?? ''"
-                @change="onFieldChange('service_name', $event)"
+                :model-value="modelValue['service_type'] ?? ''"
+                @change="onFieldChange('service_type', $event)"
             />
         </div>
 

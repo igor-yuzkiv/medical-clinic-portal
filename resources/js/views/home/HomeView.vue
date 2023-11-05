@@ -4,12 +4,11 @@ import {onMounted} from "vue";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import {useAppointments} from "@/composable/useAppointments.js";
 import XPagination from "@/components/pagination/XPagination.vue";
-import {SERVICES_OPTIONS} from "@/constants/domain.js";
+import {SERVICES_OPTIONS} from "@/constants/enums.js";
 import {Icon} from "@iconify/vue";
 import EnumLabel from "@/components/enum-label/EnumLabel.vue";
 import {useRootStore} from "@/store/useRootStore.js";
 import {useAppointmentForm} from "@/components/appointment-form/useAppointmentForm.js";
-import DisplayField from "@/components/display-field/DisplayField.vue";
 import XModal from "@/components/modal/XModal.vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
 
@@ -95,7 +94,7 @@ onMounted(async () => {
                         <div class="absolute top-1 right-0">
                             <div class="flex flex-col md:flex-row md:items-center">
                                 <enum-label
-                                    :value="item.service_name"
+                                    :value="item.service_type"
                                     :options="Object.values(SERVICES_OPTIONS)"
                                 />
                                 <Badge class="mt-1 md:mt-0">{{ item.date }}</Badge>
@@ -103,7 +102,7 @@ onMounted(async () => {
                         </div>
 
                         <div
-                            class="inline-flex shrink-0 grow-0 text-white text-lg items-center justify-center font-semibold shadow-md rounded-full bg-gradient-to-tl from-indigo-400 via-indigo-500 to-indigo-600 w-8 h-8 lg:w-10 lg:h-10"
+                            class="inline-flex shrink-0 grow-0 text-white text-md lg:text-lg items-center justify-center font-semibold shadow-md rounded-full bg-gradient-to-tl from-indigo-400 via-indigo-500 to-indigo-600 w-8 h-8 lg:w-10 lg:h-10"
                         >
                             {{ item.patient_name_initials }}
                         </div>

@@ -1,18 +1,18 @@
 export const DATE_TIME_FORMAT = 'Y-MM-D';
 
 export const SERVICES_OPTIONS = {
-    kt   : {
-        name : "КТ",
-        value: "kt"
-    },
-    mrt  : {
+    MRT  : {
         name : "МРТ",
-        value: "mrt"
+        value: 1
     },
-    x_ray: {
+    CT   : {
+        name : "КТ",
+        value: 2
+    },
+    X_RAY: {
         name : "Рентген",
-        value: "x_ray"
-    }
+        value: 3
+    },
 }
 
 export const DOCTOR_ROLE = {

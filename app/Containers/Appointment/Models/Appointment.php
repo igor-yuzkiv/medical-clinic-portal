@@ -3,6 +3,7 @@
 namespace App\Containers\Appointment\Models;
 
 use App\Abstractions\Filter\HasFilter;
+use App\Containers\Appointment\Enums\ServiceType;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Models\User;
 use Database\Factories\AppointmentFactory;
@@ -31,14 +32,15 @@ class Appointment extends Model
         "doctor_id",
         "patient_id",
         "date_time",
-        "service_name",
+        "service_type",
     ];
 
     /**
      * @var string[]
      */
     protected $casts = [
-        "date_time" => "datetime",
+        "date_time"    => "datetime",
+        "service_type" => ServiceType::class,
     ];
 
     /**
