@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Containers\Appointment;
+namespace App\Containers\Appointment\Filters;
 
 use App\Abstractions\Filter\Filter;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Enums\UserRoleEnum;
-use App\Utils\LoggerUtil;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

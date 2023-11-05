@@ -3,8 +3,8 @@
 namespace App\Containers\Appointment\Models;
 
 use App\Abstractions\Filter\HasFilter;
-use App\Containers\Appointment\CurrentUserAppointmentsFilter;
 use App\Containers\Appointment\Enums\ServiceType;
+use App\Containers\Appointment\Filters\CurrentUserAppointmentsFilter;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Models\User;
 use Database\Factories\AppointmentFactory;
