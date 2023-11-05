@@ -4,6 +4,7 @@ namespace App\Containers\Patient\Transformers;
 
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Transformers\UserTransformer;
+use App\Utils\TransformersUtil;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
@@ -32,6 +33,7 @@ class PatientTransformer extends TransformerAbstract
         return [
             'id'         => (string)$patient->id,
             'name'       => $patient->name,
+            'initials'   => TransformersUtil::getInitials($patient->name),
             'phone'      => $patient->phone,
             'email'      => $patient->email,
             'gender'     => $patient->gender,

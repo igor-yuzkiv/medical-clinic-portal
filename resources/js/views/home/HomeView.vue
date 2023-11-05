@@ -11,24 +11,27 @@ import {useRootStore} from "@/store/useRootStore.js";
 import {useAppointmentForm} from "@/components/appointment-form/useAppointmentForm.js";
 import XModal from "@/components/modal/XModal.vue";
 import {appointmentApi} from "@/api/appointmentApi.js";
+import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
+import AppointmentDetail from "@/components/appointment-detail/AppointmentDetail.vue";
+import XAvatar from "@/components/avatar/XAvatar.vue";
 
 const rootStore = useRootStore();
+const userStore = useCurrentUserStore();
 const {appointments, loadAppointments, pagination} = useAppointments();
-
 const {
-    formValue,
+    selectedAppointment,
     createAppointment,
     updateAppointment,
-    formModalIsVisible,
-    openAppointmentFormModal,
-    closeAppointmentFormModal
+    appointmentModalIsVisible,
+    openAppointmentModal,
+    closeAppointmentModal
 } = useAppointmentForm();
 
 async function onClickSaveAppointment() {
     rootStore.toggleLoader(true);
 
-    const response = formValue.value?.id
-        ? await updateAppointment(formValue.value.id)
+    const response = selectedAppointment.value?.id
+        ? await updateAppointment(selectedAppointment.value.id)
         : await createAppointment()
 
     if (!response) {
@@ -37,7 +40,7 @@ async function onClickSaveAppointment() {
     }
 
     await loadAppointments(1);
-    closeAppointmentFormModal();
+    closeAppointmentModal();
     rootStore.toggleLoader(false);
 }
 
@@ -51,8 +54,12 @@ async function onClickAppointment(appointment) {
         return
     }
 
-    formValue.value = response;
-    openAppointmentFormModal();
+    selectedAppointment.value = response;
+    openAppointmentModal();
+}
+
+function onClickDownloadResults() {
+    alert('...')
 }
 
 onMounted(async () => {
@@ -74,7 +81,11 @@ onMounted(async () => {
             </div>
 
             <div>
-                <Button class="shadow-sm" @click="openAppointmentFormModal">
+                <Button
+                    v-if="userStore.isDoctor"
+                    class="shadow-sm"
+                    @click="openAppointmentModal"
+                >
                     {{ $t('create_appointment') }}
                     <template #suffix>
                         <Icon class="text-xl" icon="icon-park-outline:plus"/>
@@ -90,39 +101,51 @@ onMounted(async () => {
                     :key="item.id"
                     @click="onClickAppointment(item)"
                 >
-                    <div class="flex relative w-full items-center bg-white rounded-xl shadow-sm p-2 cursor-pointer">
-                        <div class="absolute top-1 right-0">
-                            <div class="flex flex-col md:flex-row md:items-center">
+                    <div
+                        class="flex relative w-full items-center bg-white rounded-xl shadow-sm px-2 pt-2 pb-10 md:pb-2 cursor-pointer"
+                    >
+                        <div class="absolute bottom-1 md:top-1 right-0">
+                            <div class="flex flex-row items-center">
                                 <enum-label
                                     :value="item.service_type"
                                     :options="Object.values(SERVICES_OPTIONS)"
                                 />
-                                <Badge class="mt-1 md:mt-0">{{ item.date }}</Badge>
+
+                                <Badge class="">{{ item.date }}</Badge>
+
+                                <button
+                                    type="button"
+                                    class="mr-1 inline-flex gap-x-1 shrink-0 grow-0 text-sm font-medium bg-blue-500 text-white px-1 py-1 sm:px-3 rounded-full sm:rounded-lg"
+                                    :title="$t('download_results')"
+                                    @click.stop="onClickDownloadResults(item)"
+                                >
+                                    <span class="hidden sm:block">{{ $t('download_results') }}</span>
+                                    <Icon class="w-5 h-5" icon="line-md:download-loop"/>
+                                </button>
                             </div>
                         </div>
 
-                        <div
-                            class="inline-flex shrink-0 grow-0 text-white text-md lg:text-lg items-center justify-center font-semibold shadow-md rounded-full bg-gradient-to-tl from-indigo-400 via-indigo-500 to-indigo-600 w-8 h-8 lg:w-10 lg:h-10"
-                        >
-                            {{ item.patient_name_initials }}
-                        </div>
+                        <x-avatar size="xl" circle>{{ item.patient_name_initials }}</x-avatar>
 
                         <div class="flex flex-col items-start ml-3">
-                            <h1 class="text-xl font-semibold text-blue-950">{{ item.patient_name }}</h1>
+                            <div class="flex items-center gap-x-1 font-semibold ">
+                                <h1 class="text-gray-500">#{{ item.id }}</h1>
+                                <h1 class="text-xl text-blue-950">{{ item.patient_name }}</h1>
+                            </div>
                             <div class="mt-1 flex flex-col md:flex-row md:items-center md:divide-x">
-                                <div class="flex text-lg items-center gap-x-1 px-1">
-                                    <span class="text-gray-700 text-sm">{{$t('short_phone')}}:</span>
+                                <div class="flex text-lg items-center gap-x-1 px-1" v-if="userStore.isDoctor">
+                                    <Icon class="text-gray-500 font-semibold text-sm" icon="teenyicons:phone-solid"/>
                                     <a
                                         :href="`tel:${item.patient_phone}`"
                                         class="text-blue-600 hover:underline cursor-pointer text-sm"
                                     >
-                                        {{item.patient_phone}}
+                                        {{ item.patient_phone }}
                                     </a>
                                 </div>
 
                                 <div class="flex text-lg items-center gap-x-1 px-1">
-                                    <span class="text-gray-700 text-sm">{{$t('doctor')}}:</span>
-                                    <span class="text-alabaster-800 text-sm">{{item.doctor_name}}</span>
+                                    <span class="text-gray-700 text-sm">{{ $t('doctor') }}:</span>
+                                    <span class="text-alabaster-800 text-sm">{{ item.doctor_name }}</span>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +157,7 @@ onMounted(async () => {
             <div
                 v-else
                 class="flex flex-col flex-grow items-center justify-center text-gray-400 text-center cursor-pointer"
-                @click="openAppointmentFormModal"
+                @click="openAppointmentModal"
             >
                 <Icon icon="cil:sad" class="w-64 h-64"/>
                 <h1 class="text-3xl">{{ $t('no_records_found') }}, <br/> {{ $t('do_create_one') }}</h1>
@@ -145,24 +168,40 @@ onMounted(async () => {
     <!--Modals-->
     <teleport to="#x__modals">
         <x-modal
-            v-model="formModalIsVisible" overlay
-            @close="closeAppointmentFormModal"
-            card-class="w-auto lg:w-3/6 xl:w-2/6 p-2 h-auto"
+            v-model="appointmentModalIsVisible" overlay
+            @close="closeAppointmentModal"
+            :card-class="{
+                'h-auto p-2 max-w-[96%]' : true,
+                'w-auto lg:w-3/6 xl:w-2/6': userStore.isDoctor,
+                'w-auto': userStore.isPatient,
+            }"
         >
-            <div class="flex flex-col transition-all duration-250">
+            <div class="flex flex-col" v-if="userStore.isDoctor">
                 <h1 class="ml-5 my-2 text-lg font-semibold text-blue-950">
-                    {{ $t(formValue?.id ? 'edit_appointment' : 'create_appointment') }}
+                    {{ $t(selectedAppointment?.id ? 'edit_appointment' : 'create_appointment') }}
                 </h1>
 
-                <appointment-form v-model="formValue"/>
+                <appointment-form v-model="selectedAppointment"/>
                 <div class="flex items-center justify-between mt-3 pt-2 border-t">
-                    <Button outline @click="closeAppointmentFormModal">
+                    <Button outline @click="closeAppointmentModal">
                         {{ $t('cancel') }}
                     </Button>
                     <Button @click="onClickSaveAppointment">
                         {{ $t('save') }}
                     </Button>
                 </div>
+            </div>
+            <div class="flex flex-col" v-if="userStore.isPatient">
+                <appointment-detail :appointment-id="selectedAppointment.id">
+                    <div class="flex items-center justify-center w-full h-full">
+                        <Button @click.stop="onClickDownloadResults(selectedAppointment)">
+                            <template #prefix>
+                                <Icon class="text-xl" icon="line-md:download-loop"/>
+                            </template>
+                            {{ $t('download_results') }}
+                        </Button>
+                    </div>
+                </appointment-detail>
             </div>
         </x-modal>
     </teleport>

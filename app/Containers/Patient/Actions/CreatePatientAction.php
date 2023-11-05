@@ -16,6 +16,7 @@ class CreatePatientAction implements ActionInterface
 {
     /**
      * @param PatientDto $patientDto
+     * @param User $doctor
      */
     public function __construct(
         private readonly PatientDto $patientDto,
@@ -32,6 +33,7 @@ class CreatePatientAction implements ActionInterface
      */
     public function handle(): Patient
     {
+        $this->patientDto->phone = preg_replace('/[^0-9]/', '', $this->patientDto->phone);
         $patient = Patient::where("phone", $this->patientDto->phone)->first();
 
         if ($patient) {
@@ -56,7 +58,7 @@ class CreatePatientAction implements ActionInterface
      * @param int $patient_id
      * @return void
      */
-    private function createRelation(int $patient_id)
+    private function createRelation(int $patient_id): void
     {
         DoctorPatient::create([
             "doctor_id"  => $this->doctor->id,

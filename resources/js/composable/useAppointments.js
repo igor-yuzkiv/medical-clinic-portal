@@ -23,7 +23,8 @@ export function useAppointments() {
                     paginate: true,
                     per_page: pagination.value.per_page ?? 10,
                     page    : pagination.value.current_page ?? 1,
-                }
+                },
+                filters: ["currentUser()"],
             })
             .then(({data}) => data)
             .catch(console.error)

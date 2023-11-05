@@ -10,6 +10,10 @@ export default defineComponent({
         options:{
             type: Array,
             default: () => []
+        },
+        badgeType: {
+            type: String,
+            default: 'green'
         }
     },
     setup(props) {
@@ -21,7 +25,7 @@ export default defineComponent({
             return ''
         })
 
-        return () => h(Badge, {type: 'green', class: 'inline-flex'}, () => [label.value])
+        return () => h(Badge, {type: props.badgeType, class: 'inline-flex'}, () => [label.value])
     }
 })
 </script>

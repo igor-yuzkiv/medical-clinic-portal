@@ -3,6 +3,7 @@
 namespace App\Containers\Appointment\Models;
 
 use App\Abstractions\Filter\HasFilter;
+use App\Containers\Appointment\CurrentUserAppointmentsFilter;
 use App\Containers\Appointment\Enums\ServiceType;
 use App\Containers\Patient\Models\Patient;
 use App\Containers\User\Models\User;
@@ -44,6 +45,13 @@ class Appointment extends Model
     ];
 
     /**
+     * @var array|string[]
+     */
+    protected array $filters = [
+        'currentUser' => CurrentUserAppointmentsFilter::class,
+    ];
+
+    /**
      * @return HasOne
      */
     public function doctor(): HasOne
@@ -59,6 +67,9 @@ class Appointment extends Model
         return $this->hasOne(Patient::class, "id", "patient_id");
     }
 
+    /**
+     * @return Factory
+     */
     public static function newFactory(): Factory
     {
         return AppointmentFactory::new();

@@ -27,6 +27,10 @@ export default {
     do_create_one              : "створіть їх",
     pleas_select_one           : "Будь ласка, виберіть щось",
     patient_name               : "Ім'я пацієнта",
+    enter_patient_name         : "Введіть ім'я пацієнта",
+    enter_appointment_date     : "Вкажіть дату запису",
+    select_service             : "--Виберіть послугу--",
+    select_patient             : "Виберіть або створіть нового пацієнта",
     patient_phone              : "Телефон пацієнта",
     short_phone                : "Моб.",
     back                       : "Назад",
@@ -36,4 +40,5 @@ export default {
     service_is_required        : "Поле Послуга є обов'язковим",
     date_is_required           : "Поле Дата є обов'язковим",
     phone_is_invalid           : "Невірний формат телефону",
+    download_results           : "Завантажити результати",
 }

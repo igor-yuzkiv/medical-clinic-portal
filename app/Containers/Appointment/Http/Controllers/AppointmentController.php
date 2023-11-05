@@ -75,6 +75,7 @@ class AppointmentController extends ResourceController
 
     /**
      * @param Appointment $appointment
+     * @param Request $request
      * @return JsonResponse
      */
     public function show(Appointment $appointment, Request $request): JsonResponse

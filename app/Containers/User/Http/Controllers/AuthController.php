@@ -3,6 +3,7 @@
 namespace App\Containers\User\Http\Controllers;
 
 use App\Abstractions\Controller\Controller;
+use App\Containers\User\Action\RegistryUserAction;
 use App\Containers\User\Http\Requests\RegisterUserRequest;
 use App\Containers\User\Models\User;
 use App\Containers\User\Transformers\UserTransformer;
@@ -98,39 +99,7 @@ class AuthController extends Controller
     {
         try {
             $userDto = $request->getUserDto();
-            $user = User::query()
-                ->where('phone', $userDto->phone)
-                ->first();
-
-            if (!$user) {
-                $user = User::create($userDto->toArray());
-                return fractal($user)
-                    ->transformWith(new UserTransformer())
-                    ->serializeWith(ArraySerializer::class)
-                    ->respond();
-            }
-
-            if ($user->is_active) {
-                $userData = fractal($user)
-                    ->transformWith(new UserTransformer())
-                    ->serializeWith(ArraySerializer::class)
-                    ->toArray();
-
-                return response()->json([
-                    'message' => 'User already exists',
-                    'user'    => $userData
-                ], 422);
-            }
-
-            $data = $userDto->toArray();
-            $data["password"] = \Hash::make($userDto->password);
-            $data['is_active'] = true;
-            $user->update($data);
-
-            return fractal($user)
-                ->transformWith(new UserTransformer())
-                ->serializeWith(ArraySerializer::class)
-                ->respond();
+            return (new RegistryUserAction($userDto))->handle();
         } catch (\Exception $exception) {
             LoggerUtil::exception($exception);
             return ResponseUtil::exception($exception);

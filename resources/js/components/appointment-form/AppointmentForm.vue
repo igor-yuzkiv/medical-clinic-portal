@@ -73,6 +73,7 @@ async function handleSearchPatient(search) {
             append-icon="icon-park:plus"
             @click:append="isNewPatient = true"
             required
+            :placeholder="$t('select_patient')"
         />
 
         <div v-if="modelValue['is_new_patient']">
@@ -84,6 +85,7 @@ async function handleSearchPatient(search) {
                 <Input
                     :model-value="modelValue['patient_name'] ?? ''"
                     @input="onFieldChange('patient_name', $event)"
+                    :placeholder="$t('enter_patient_name')"
                 />
             </div>
 
@@ -94,8 +96,8 @@ async function handleSearchPatient(search) {
                 </label>
                 <Input
                     v-maska
-                    data-maska="+38##########"
-                    placeholder="+38__________"
+                    data-maska="38##########"
+                    placeholder="380999999999"
                     :model-value="modelValue['patient_phone'] ?? ''"
                     @input="onFieldChange('patient_phone', $event)"
                 />
@@ -109,7 +111,7 @@ async function handleSearchPatient(search) {
             </label>
             <Select
                 :options="Object.values(SERVICES_OPTIONS)"
-                placeholder="Оберіть послугу"
+                :placeholder="$t('select_service')"
                 :model-value="modelValue['service_type'] ?? ''"
                 @change="onFieldChange('service_type', $event)"
             />
@@ -128,6 +130,7 @@ async function handleSearchPatient(search) {
                 :format-locale="uk"
                 :enable-time-picker="false"
                 v-model="dateTime"
+                :placeholder="$t('enter_appointment_date')"
             />
         </div>
     </div>

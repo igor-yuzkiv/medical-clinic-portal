@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {logoutRequest} from "@/api/usersApi.js";
+import {DOCTOR_ROLE, PATIENT_ROLE} from "@/constants/enums.js";
 
 export const useCurrentUserStore = defineStore('currentUser', {
     state  : () => ({
@@ -19,11 +20,18 @@ export const useCurrentUserStore = defineStore('currentUser', {
         },
         getInitials() {
             return this.userData?.initials
+        },
+        isDoctor() {
+            return this.userData?.role === DOCTOR_ROLE.value;
+        },
+        isPatient() {
+            return this.userData?.role === PATIENT_ROLE.value;
         }
     },
     actions: {
         async logout() {
-            await logoutRequest().catch(() => {});
+            await logoutRequest().catch(() => {
+            });
             this.userData = null;
             localStorage.removeItem('token');
         },

@@ -10,7 +10,7 @@ const props = defineProps({
         default: false,
     },
     cardClass : {
-        type   : String,
+        type   : [String, Object],
         default: "",
     },
     overlay   : {

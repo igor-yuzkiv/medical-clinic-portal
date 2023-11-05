@@ -10,6 +10,10 @@ const props = defineProps({
         type   : String,
         default: ''
     },
+    placeholder  : {
+        type   : String,
+        default: ''
+    },
     itemKey      : {
         type   : String,
         default: 'id'
@@ -128,6 +132,7 @@ useOnClickOutside(containerRef, handleHideList)
                 @focus="handleOpenList"
                 v-model="keywordQuery"
                 @input="onKeywordQueryChange"
+                :placeholder="placeholder"
             />
 
             <Icon

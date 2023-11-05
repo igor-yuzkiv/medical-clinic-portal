@@ -7,7 +7,7 @@ export const formInitialValue = () => ({
     id            : null,
     patient_id    : null,
     patient_name  : '',
-    patient_phone : '+38 ',
+    patient_phone : '',
     service_type  : '',
     date_time     : '',
     is_new_patient: false,
@@ -30,7 +30,7 @@ export const formValidationSchema = () => Yup.object({
     patient_phone : Yup.string()
         .when('is_new_patient', {
             is       : true,
-            then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')).matches(/^\+\d{12}$/, i18n.global.t('phone_is_invalid')),
+            then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')).matches(/^\d{12}$/, i18n.global.t('phone_is_invalid')),
             otherwise: (schema) => schema.nullable()
         }),
     service_type  : Yup.number().required(i18n.global.t('service_is_required')),
@@ -38,13 +38,13 @@ export const formValidationSchema = () => Yup.object({
 });
 
 export function useAppointmentForm() {
-    const formValue = ref(formInitialValue())
-    const formModalIsVisible = ref(false);
+    const selectedAppointment = ref(formInitialValue())
+    const appointmentModalIsVisible = ref(false);
     const toast = inject("toast");
 
     async function validateForm() {
         return await formValidationSchema()
-            .validate(formValue.value, {abortEarly: true})
+            .validate(selectedAppointment.value, {abortEarly: true})
             .catch(({message}) => {
                 toast.error(message);
             })
@@ -76,22 +76,22 @@ export function useAppointmentForm() {
             })
     }
 
-    function openAppointmentFormModal() {
-        formModalIsVisible.value = true;
+    function openAppointmentModal() {
+        appointmentModalIsVisible.value = true;
     }
 
-    function closeAppointmentFormModal() {
-        formValue.value = formInitialValue();
-        formModalIsVisible.value = false;
+    function closeAppointmentModal() {
+        selectedAppointment.value = formInitialValue();
+        appointmentModalIsVisible.value = false;
     }
 
     return {
-        formValue,
+        selectedAppointment,
         validateForm,
         createAppointment,
         updateAppointment,
-        formModalIsVisible,
-        openAppointmentFormModal,
-        closeAppointmentFormModal,
+        appointmentModalIsVisible,
+        openAppointmentModal,
+        closeAppointmentModal,
     }
 }
