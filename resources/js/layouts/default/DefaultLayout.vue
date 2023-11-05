@@ -6,7 +6,7 @@ import assetsPath from "@/constants/assetsPath.js";
 </script>
 
 <template>
-    <section class="relative flex flex-col h-screen w-full overflow-hidden bg-gray-100">
+    <section class="relative flex flex-col h-screen w-full overflow-hidden bg-gray-100 min-w-[350px]">
         <header class="flex items-center justify-between px-2 w-full p-2 bg-white shadow-sm">
             <div class="flex items-center gap-x-3">
                 <img class="w-10" :src="assetsPath.logo" alt="full-logo"/>

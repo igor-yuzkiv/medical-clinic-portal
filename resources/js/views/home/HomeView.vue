@@ -102,38 +102,42 @@ onMounted(async () => {
                     @click="onClickAppointment(item)"
                 >
                     <div
-                        class="flex relative w-full items-center bg-white rounded-xl shadow-sm px-2 pt-2 pb-10 md:pb-2 cursor-pointer"
+                        class="flex relative w-full bg-white rounded-xl shadow-sm px-2 pt-2 pb-10 md:pb-2 cursor-pointer"
                     >
-                        <div class="absolute bottom-1 md:top-1 right-0">
-                            <div class="flex flex-row items-center">
-                                <enum-label
-                                    :value="item.service_type"
-                                    :options="Object.values(SERVICES_OPTIONS)"
-                                />
-
-                                <Badge class="">{{ item.date }}</Badge>
-
-                                <button
-                                    type="button"
-                                    class="mr-1 inline-flex gap-x-1 shrink-0 grow-0 text-sm font-medium bg-blue-500 text-white px-1 py-1 sm:px-3 rounded-full sm:rounded-lg"
-                                    :title="$t('download_results')"
-                                    @click.stop="onClickDownloadResults(item)"
-                                >
-                                    <span class="hidden sm:block">{{ $t('download_results') }}</span>
-                                    <Icon class="w-5 h-5" icon="line-md:download-loop"/>
-                                </button>
-                            </div>
+                        <div class="absolute bottom-1 right-0">
+                            <button
+                                type="button"
+                                class="mr-1 inline-flex gap-x-1 shrink-0 grow-0 text-sm font-medium bg-blue-600 text-white px-1 py-1 sm:px-3 rounded-full sm:rounded-lg"
+                                :title="$t('download_results')"
+                                @click.stop="onClickDownloadResults(item)"
+                            >
+                                <span>{{ $t('download_results') }}</span>
+                                <Icon class="w-5 h-5" icon="line-md:download-loop"/>
+                            </button>
                         </div>
 
-                        <x-avatar size="xl" circle>{{ item.patient_name_initials }}</x-avatar>
+                        <div class="flex flex-col items-center ml-1 sm:ml-3">
+                            <x-avatar size="xl" circle class="mb-2">{{ item.patient_name_initials }}</x-avatar>
+                            <enum-label
+                                class="w-full"
+                                :value="item.service_type"
+                                :options="Object.values(SERVICES_OPTIONS)"
+                            />
 
-                        <div class="flex flex-col items-start ml-3">
-                            <div class="flex items-center gap-x-1 font-semibold ">
+                            <Badge class="mt-1 p-1 w-full truncate">{{ item.date }}</Badge>
+                        </div>
+
+                        <div class="flex flex-col ml-1 sm:ml-3 h-full">
+                            <div class="flex items-center gap-x-1 font-semibold truncate">
                                 <h1 class="text-gray-500">#{{ item.id }}</h1>
                                 <h1 class="text-xl text-blue-950">{{ item.patient_name }}</h1>
                             </div>
-                            <div class="mt-1 flex flex-col md:flex-row md:items-center md:divide-x">
-                                <div class="flex text-lg items-center gap-x-1 px-1" v-if="userStore.isDoctor">
+
+                            <div class="flex flex-col">
+                                <div
+                                    class="flex text-lg items-center gap-x-1 px-1"
+                                    v-if="userStore.isDoctor"
+                                >
                                     <Icon class="text-gray-500 font-semibold text-sm" icon="teenyicons:phone-solid"/>
                                     <a
                                         :href="`tel:${item.patient_phone}`"
@@ -143,9 +147,9 @@ onMounted(async () => {
                                     </a>
                                 </div>
 
-                                <div class="flex text-lg items-center gap-x-1 px-1">
-                                    <span class="text-gray-700 text-sm">{{ $t('doctor') }}:</span>
-                                    <span class="text-alabaster-800 text-sm">{{ item.doctor_name }}</span>
+                                <div class="flex items-center px-1 mt-3 font-medium">
+                                    <span class="text-gray-600 text-sm">{{ $t('doctor') }}:</span>
+                                    <span class="ml-1 text-blue-950 text-sm">{{ item.doctor_name }}</span>
                                 </div>
                             </div>
                         </div>
