@@ -8,6 +8,7 @@ export default {
         'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
     ],
     theme  : {
+        darkMode: '',
         colors: {
             white   : '#ffffff',
             black   : '#000',

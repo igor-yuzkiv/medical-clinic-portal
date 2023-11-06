@@ -27,11 +27,7 @@ class AppointmentController extends ResourceController
      */
     public function index(Request $request): JsonResponse
     {
-        $appointments = AppointmentPivotView::query()
-            ->orderBy(
-                $request->input('orderBy', 'date_time'),
-                $request->input('order', 'desc')
-            );
+        $appointments = AppointmentPivotView::query()->orderBy("created_at", "DESC");
 
         if ($request->input("filters")) {
             $appointments->filter($request->input("filters"));

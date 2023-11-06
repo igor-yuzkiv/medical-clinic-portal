@@ -1,5 +1,3 @@
-export const DATE_TIME_FORMAT = 'Y-MM-D';
-
 export const SERVICES_OPTIONS = {
     MRT  : {
         name : "МРТ",

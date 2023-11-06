@@ -4,7 +4,7 @@ import {Input, Select} from "flowbite-vue";
 import {SERVICES_OPTIONS} from "@/constants/enums.js";
 import {uk} from 'date-fns/locale';
 import {computed} from "vue";
-import {DATE_TIME_FORMAT} from "@/constants/enums.js";
+import {DISPLAY_DATE_FORMAT, SERVER_DATE_FORMAT} from "@/constants/index.js";
 import moment from "moment";
 import {usePatients} from "@/composable/usePatients.js";
 import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
@@ -23,11 +23,14 @@ const {filters, patients, loadPatents} = usePatients(true);
 
 const dateTime = computed({
     get() {
-        return props.modelValue['date_time'] ?? '';
+        if (!props.modelValue['date_time']) return '';
+        return moment(props.modelValue['date_time'], SERVER_DATE_FORMAT).toDate();
     },
     set(value) {
-        value = moment(value).format(DATE_TIME_FORMAT);
-        emit('update:modelValue', {...props.modelValue, date_time: value});
+        emit('update:modelValue', {
+            ...props.modelValue,
+            date_time: moment(value).format(SERVER_DATE_FORMAT)
+        });
     }
 })
 
@@ -128,9 +131,11 @@ async function handleSearchPatient(search) {
                 :cancelText="$t('cancel')"
                 :selectText="$t('select')"
                 :format-locale="uk"
+                :format="DISPLAY_DATE_FORMAT"
                 :enable-time-picker="false"
                 v-model="dateTime"
                 :placeholder="$t('enter_appointment_date')"
+                auto-apply
             />
         </div>
     </div>

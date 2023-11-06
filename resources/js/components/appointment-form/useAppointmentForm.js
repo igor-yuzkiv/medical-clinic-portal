@@ -33,7 +33,7 @@ export const formValidationSchema = () => Yup.object({
             then     : (schema) => schema.required(i18n.global.t('patient_phone_is_required')).matches(/^\d{12}$/, i18n.global.t('phone_is_invalid')),
             otherwise: (schema) => schema.nullable()
         }),
-    service_type  : Yup.number().required(i18n.global.t('service_is_required')),
+    service_type  : Yup.string().required(i18n.global.t('service_is_required')),
     date_time     : Yup.string().required(i18n.global.t('date_is_required')),
 });
 
