@@ -4,7 +4,7 @@ import assetsPath from "@/constants/assetsPath.js";
 
 <template>
     <section
-        class="x__auth-layout relative flex flex-col flex-grow md:justify-center h-screen overflow-hidden bg-gradient-to-b from-indigo-200/60 to-indigo-200"
+        class="x__auth-layout relative flex flex-col flex-grow md:justify-center h-screen overflow-hidden bg-gradient-to-tr from-white to-patina-50"
     >
         <div class="absolute top-0 -right-44">
             <svg class="w-[300px]" viewBox="0 0 1869 606" fill="none" xmlns="http://www.w3.org/2000/svg">
