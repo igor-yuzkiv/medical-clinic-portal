@@ -5,7 +5,7 @@ services:
         container_name: clinic_portal_redis
         image: redis
         ports:
-            - 6379:6379
+            - 26379:6379
         networks:
             - app-network
 
@@ -18,9 +18,9 @@ services:
         volumes:
             - ./dbdata:/var/lib/mysql
         ports:
-            - '3306:3306'
+            - '23306:3306'
         expose:
-            - '3306'
+            - '23306'
         environment:
             - MYSQL_DATABASE=${DB_DATABASE}
             - MYSQL_USER=${DB_USERNAME}
