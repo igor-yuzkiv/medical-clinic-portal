@@ -1,4 +1,4 @@
 export default {
-    fullLogo: '/images/full-logo.png',
-    logo    : '/images/logo.png',
+    fullLogo: '/assets/full-logo.png',
+    logo    : '/assets/logo.png',
 }

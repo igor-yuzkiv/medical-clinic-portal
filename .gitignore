@@ -20,3 +20,4 @@ yarn-error.log
 /_tmp/
 /docker/dbdata
 /storage/debugbar/
+/public/assets/
