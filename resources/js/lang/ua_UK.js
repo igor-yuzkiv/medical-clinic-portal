@@ -43,4 +43,5 @@ export default {
     download_results           : "Завантажити результати",
     edit_patient               : "Редагувати пацієнта",
     create_patient             : "Створити пацієнта",
+    saved_successfully         : "Збережено успішно",
 }
