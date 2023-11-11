@@ -139,7 +139,7 @@ useOnClickOutside(containerRef, handleHideList)
                 v-if="appendIcon"
                 :icon="appendIcon"
                 class="absolute top-[5px] right-1 w-8 h-8 text-gray-400 cursor-pointer rounded-full hover:bg-gray-200 p-1"
-                @click="$emit('click:append')"
+                @click="$emit('click:append', keywordQuery, $event)"
             />
         </div>
 

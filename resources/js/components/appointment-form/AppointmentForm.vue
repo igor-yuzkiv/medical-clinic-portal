@@ -3,7 +3,7 @@ import AutocompleteField from "@/components/autocomplete-field/AutocompleteField
 import {Input, Select} from "flowbite-vue";
 import {SERVICES_OPTIONS} from "@/constants/enums.js";
 import {uk} from 'date-fns/locale';
-import {computed} from "vue";
+import {computed, nextTick} from "vue";
 import {DISPLAY_DATE_FORMAT, SERVER_DATE_FORMAT} from "@/constants/index.js";
 import moment from "moment";
 import {usePatients} from "@/composable/usePatients.js";
@@ -53,13 +53,25 @@ const patientId = computed({
 })
 
 function onFieldChange(field, e) {
-    emit('update:modelValue', {...props.modelValue, [field]: e.target.value});
+    emit('update:modelValue', {
+        ...props.modelValue,
+        [field]: e?.target ? e.target.value : e
+    });
 }
 
 async function handleSearchPatient(search) {
     filters.value = [`doctor(${currentUserStore.getId})`, `search(keyword:${search})`];
     await loadPatents();
     return patients.value;
+}
+
+function onClickIsNewPatient(searchKeyword) {
+    isNewPatient.value = true;
+    nextTick(() => {
+        if (searchKeyword) {
+            onFieldChange('patient_name', searchKeyword);
+        }
+    })
 }
 </script>
 
@@ -74,7 +86,7 @@ async function handleSearchPatient(search) {
             item-label="name"
             :items-provider="handleSearchPatient"
             append-icon="icon-park:plus"
-            @click:append="isNewPatient = true"
+            @click:append="onClickIsNewPatient"
             required
             :placeholder="$t('select_patient')"
         />

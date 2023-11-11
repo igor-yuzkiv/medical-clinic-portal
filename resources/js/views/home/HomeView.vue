@@ -65,11 +65,11 @@ async function onClickSavePatient() {
     if (!validated) {
         return;
     }
-    console.log(validated);
+
     const handleSave = async () => {
         if (patientFormValue.value?.id) {
-            return await updatePatient(patientFormValue.value.id,validated);
-        }else {
+            return await updatePatient(patientFormValue.value.id, validated);
+        } else {
             return await createPatient(validated);
         }
     }
@@ -93,18 +93,26 @@ async function onClickSavePatient() {
 async function onClickSaveAppointment() {
     rootStore.toggleLoader(true);
 
-    const response = selectedAppointment.value?.id
-        ? await updateAppointment(selectedAppointment.value.id)
-        : await createAppointment()
-
-    if (!response) {
-        rootStore.toggleLoader(false);
-        return;
+    const handleSave = async () => {
+        return selectedAppointment.value?.id
+            ? await updateAppointment(selectedAppointment.value.id)
+            : await createAppointment()
     }
 
-    await loadAppointments(1);
-    closeAppointmentModal();
-    rootStore.toggleLoader(false);
+    rootStore.toggleLoader(true);
+    await handleSave()
+        .then(({data}) => {
+            if (!data?.id) {
+                toast.success(i18n.global.t("saved_successfully"))
+                closeAppointmentModal();
+                loadAppointments();
+                return;
+            }
+
+            toast.error(i18n.global.t("something_went_wrong"))
+        })
+        .catch(() => toast.error(i18n.global.t("something_went_wrong")))
+        .finally(() => rootStore.toggleLoader(false))
 }
 
 async function onClickAppointment(appointment) {
