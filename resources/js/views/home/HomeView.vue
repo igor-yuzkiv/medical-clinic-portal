@@ -128,9 +128,9 @@ onMounted(async () => {
                         </div>
 
                         <div class="flex flex-col ml-1 sm:ml-3 h-full">
-                            <div class="flex gap-x-1 font-semibold">
+                            <div class="flex items-center gap-x-1 font-semibold">
                                 <h1 class="text-gray-500">#{{ item.id }}</h1>
-                                <h1 class="text-xl text-blue-950">{{ item.patient_name }}</h1>
+                                <h1 class="text-xl text-blue-500 custor-pointer hover:underline">{{ item.patient_name }}</h1>
                             </div>
 
                             <div class="flex flex-col">
@@ -141,7 +141,7 @@ onMounted(async () => {
                                     <Icon class="text-gray-500 font-semibold text-sm" icon="teenyicons:phone-solid"/>
                                     <a
                                         :href="`tel:${item.patient_phone}`"
-                                        class="text-blue-600 hover:underline cursor-pointer text-sm"
+                                        class="text-blue-500 hover:underline cursor-pointer text-sm"
                                     >
                                         {{ item.patient_phone }}
                                     </a>

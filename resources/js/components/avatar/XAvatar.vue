@@ -37,7 +37,7 @@ const sizeVariants = {
             'rounded-full' : circle,
             'rounded-lg' : square  && !circle,
             [sizeVariants[size ?? 'md']]: true,
-            'bg-gradient-to-tl from-indigo-400 via-indigo-500 to-indigo-600': !image,
+            'bg-gradient-to-tl from-atoll-500 via-atoll-600 to-patina-400': !image,
         }"
     >
         <slot>

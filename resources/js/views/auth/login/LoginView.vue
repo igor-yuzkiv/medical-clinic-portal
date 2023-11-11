@@ -56,22 +56,19 @@ export default defineComponent({
 <template>
     <div class="flex flex-col flex-grow items-center">
         <div class="flex flex-none flex-col items-center justify-center text-center">
-            <h1 class="text-2xl font-semibold uppercase">{{ $t("sign_in") }}</h1>
-            <div class="text-sm text-gray-500 mt-2">Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-            </div>
+            <h1 class="text-jelly-bean-800 text-2xl font-semibold uppercase">{{ $t("sign_in") }}</h1>
         </div>
 
-        <div class="flex flex-col items-center w-full md:w-3/4 mt-5">
+        <div class="flex flex-col items-center w-full md:w-3/4 mt-5 lg:mt-8">
             <div class="relative flex items-center w-full">
                 <Icon
                     icon="ri:user-line"
-                    class="absolute left-2 text-2xl text-indigo-700"
+                    class="absolute left-2 text-2xl text-jelly-bean-700"
                 />
                 <input
                     type="text"
                     v-model="formData.login"
-                    class="bg-indigo-100 shadow-sm border-none text-gray-900 rounded-xl focus:ring-indigo-500 block w-full pl-10 pr-2.5 py-2.5"
+                    class="bg-jelly-bean-50 shadow-sm border-none text-jelly-bean-700 rounded-xl focus:ring-jelly-bean-500 block w-full pl-10 pr-2.5 py-2.5"
                     :placeholder="$t('login')"
                 />
             </div>
@@ -79,25 +76,25 @@ export default defineComponent({
             <div class="relative flex items-center w-full mt-3">
                 <Icon
                     icon="mdi:password-outline"
-                    class="absolute left-2 text-2xl text-indigo-700"
+                    class="absolute left-2 text-2xl text-jelly-bean-700"
                 />
                 <input
                     v-model="formData.password"
                     :type="showPassword ? 'text' : 'password'"
-                    class="bg-indigo-100 shadow-sm border-none text-gray-900 rounded-xl focus:ring-indigo-500 block w-full px-10 py-2.5"
+                    class="bg-jelly-bean-50 shadow-sm border-none text-jelly-bean-700 rounded-xl focus:ring-jelly-bean-500 block w-full pl-10 pr-2.5 py-2.5"
                     :placeholder="$t('password')"
                 />
 
                 <Icon
                     :icon="showPassword ? 'mdi:eye-off-outline' : 'mdi:eye-outline'"
-                    class="absolute right-2 text-2xl text-indigo-700 cursor-pointer"
+                    class="absolute right-2 text-2xl text-jelly-bean-700"
                     @click="showPassword = !showPassword"
                 />
             </div>
 
             <button
                 type="button"
-                class="block w-full mt-7 py-3 px-2 bg-indigo-500 text-white uppercase font-semibold rounded-full hover:bg-indigo-600"
+                class="block w-full mt-7 py-3 px-2 bg-patina-500 text-white uppercase font-semibold rounded-2xl hover:bg-jelly-bean-600"
                 @click="onClickLogin"
             >
                 {{ $t("sign_in_now") }}
