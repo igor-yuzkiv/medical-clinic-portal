@@ -41,4 +41,6 @@ export default {
     date_is_required           : "Поле Дата є обов'язковим",
     phone_is_invalid           : "Невірний формат телефону",
     download_results           : "Завантажити результати",
+    edit_patient               : "Редагувати пацієнта",
+    create_patient             : "Створити пацієнта",
 }

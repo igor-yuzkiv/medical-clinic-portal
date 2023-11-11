@@ -23,3 +23,15 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-700;
 }
+
+
+/*
+Display some content on hover
+*/
+.x_change-target {
+  display: none;
+}
+
+.x_change-content:hover .x_change-target {
+    display: block;
+}

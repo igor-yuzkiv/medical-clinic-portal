@@ -1,6 +1,6 @@
 <script setup>
 import {Badge, Button} from "flowbite-vue";
-import {onMounted} from "vue";
+import {inject, onMounted, ref} from "vue";
 import AppointmentForm from "@/components/appointment-form/AppointmentForm.vue";
 import {useAppointments} from "@/composable/useAppointments.js";
 import XPagination from "@/components/pagination/XPagination.vue";
@@ -14,7 +14,11 @@ import {appointmentApi} from "@/api/appointmentApi.js";
 import {useCurrentUserStore} from "@/store/useCurrentUserStore.js";
 import AppointmentDetail from "@/components/appointment-detail/AppointmentDetail.vue";
 import XAvatar from "@/components/avatar/XAvatar.vue";
+import {usePatientForm} from "@/components/patient-form/usePatientForm.js";
+import PatientForm from "@/components/patient-form/PatientForm.vue";
+import {i18n} from "@/plugins/i18n";
 
+const toast = inject('toast');
 const rootStore = useRootStore();
 const userStore = useCurrentUserStore();
 const {appointments, loadAppointments, pagination} = useAppointments();
@@ -26,6 +30,65 @@ const {
     openAppointmentModal,
     closeAppointmentModal
 } = useAppointmentForm();
+
+const {
+    patientFormValue,
+    loadPatientById,
+    validatePatientForm,
+    createPatient,
+    updatePatient
+} = usePatientForm();
+
+const patientFormModalIsOpen = ref(false);
+
+async function openPatientFormModal(id = null) {
+    if (userStore.isPatient) {
+        return;
+    }
+
+    if (id) {
+        const patient = await loadPatientById(id);
+        if (!patient) {
+            toast.error(i18n.global.t("something_went_wrong"))
+            return;
+        }
+    }
+    patientFormModalIsOpen.value = true;
+}
+
+function closePatientFormModal() {
+    patientFormModalIsOpen.value = false;
+}
+
+async function onClickSavePatient() {
+    const validated = await validatePatientForm();
+    if (!validated) {
+        return;
+    }
+    console.log(validated);
+    const handleSave = async () => {
+        if (patientFormValue.value?.id) {
+            return await updatePatient(patientFormValue.value.id,validated);
+        }else {
+            return await createPatient(validated);
+        }
+    }
+
+    rootStore.toggleLoader(true)
+    await handleSave()
+        .then(({data}) => {
+            if (!data?.id) {
+                toast.success(i18n.global.t("saved_successfully"))
+                closePatientFormModal();
+                loadAppointments();
+                return;
+            }
+
+            toast.error(i18n.global.t("something_went_wrong"))
+        })
+        .catch(() => toast.error(i18n.global.t("something_went_wrong")))
+        .finally(() => rootStore.toggleLoader(false))
+}
 
 async function onClickSaveAppointment() {
     rootStore.toggleLoader(true);
@@ -128,9 +191,18 @@ onMounted(async () => {
                         </div>
 
                         <div class="flex flex-col ml-1 sm:ml-3 h-full">
-                            <div class="flex items-center gap-x-1 font-semibold">
+                            <div
+                                class="flex items-center gap-x-1 font-semibold"
+                                :class="{
+                                    'x_change-content' : userStore.isDoctor,
+                                }"
+                                @click.stop="openPatientFormModal(item.patient_id)"
+                            >
                                 <h1 class="text-gray-500">#{{ item.id }}</h1>
-                                <h1 class="text-xl text-blue-500 custor-pointer hover:underline">{{ item.patient_name }}</h1>
+                                <h1 class="text-xl text-blue-500 custor-pointer hover:underline">
+                                    {{ item.patient_name }}
+                                </h1>
+                                <Icon class="x_change-target text-xl text-blue-500" icon="mdi:pencil"/>
                             </div>
 
                             <div class="flex flex-col">
@@ -172,13 +244,14 @@ onMounted(async () => {
     <!--Modals-->
     <teleport to="#x__modals">
         <x-modal
-            v-model="appointmentModalIsVisible" overlay
+            v-model="appointmentModalIsVisible"
             @close="closeAppointmentModal"
             :card-class="{
                 'h-auto p-2 max-w-[96%]' : true,
                 'w-auto lg:w-3/6 xl:w-2/6': userStore.isDoctor,
                 'w-auto': userStore.isPatient,
             }"
+            overlay
         >
             <div class="flex flex-col" v-if="userStore.isDoctor">
                 <h1 class="ml-5 my-2 text-lg font-semibold text-blue-950">
@@ -207,6 +280,35 @@ onMounted(async () => {
                     </div>
                 </appointment-detail>
             </div>
+        </x-modal>
+
+        <x-modal
+            v-model="patientFormModalIsOpen"
+            @close="closePatientFormModal"
+            :card-class="{
+                'h-auto p-2 max-w-[96%]' : true,
+                'w-auto lg:w-3/6 xl:w-2/6': userStore.isDoctor,
+                'w-auto': userStore.isPatient,
+            }"
+            overlay
+        >
+            <div class="flex flex-col">
+                <h1 class="ml-5 my-2 text-lg font-semibold text-blue-950">
+                    {{ $t(patientFormValue?.id ? 'edit_patient' : 'create_patient') }}
+                </h1>
+
+                <patient-form v-model="patientFormValue"/>
+
+                <div class="flex items-center justify-between mt-3 pt-2 border-t">
+                    <Button outline @click="closePatientFormModal">
+                        {{ $t('cancel') }}
+                    </Button>
+                    <Button @click="onClickSavePatient">
+                        {{ $t('save') }}
+                    </Button>
+                </div>
+            </div>
+
         </x-modal>
     </teleport>
 </template>

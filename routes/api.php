@@ -37,6 +37,10 @@ Route::prefix("patients")
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get("", [\App\Containers\Patient\Http\Controllers\PatientController::class, "index"]);
+        Route::post("", [\App\Containers\Patient\Http\Controllers\PatientController::class, "store"]);
+        Route::get("{patient}", [\App\Containers\Patient\Http\Controllers\PatientController::class, "show"])->where("appointment", "[0-9]+");
+        Route::put("{patient}", [\App\Containers\Patient\Http\Controllers\PatientController::class, "update"])->where("appointment", "[0-9]+");
+        Route::delete("{patient}", [\App\Containers\Patient\Http\Controllers\PatientController::class, "destroy"])->where("appointment", "[0-9]+");
     });
 
 
